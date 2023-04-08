@@ -1,0 +1,342 @@
+[
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_expectedState",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_settlePrice",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "_referralAddr",
+        "type": "address"
+      },
+      {
+        "internalType": "bytes",
+        "name": "_signature",
+        "type": "bytes"
+      },
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "maker",
+            "type": "address"
+          },
+          {
+            "internalType": "enum MarketOrder.OrderKind",
+            "name": "kind",
+            "type": "uint8"
+          },
+          {
+            "components": [
+              {
+                "internalType": "enum MarketAsset.TokenStandard",
+                "name": "erc",
+                "type": "uint8"
+              },
+              {
+                "internalType": "address",
+                "name": "addr",
+                "type": "address"
+              },
+              {
+                "internalType": "uint256",
+                "name": "id",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "quantity",
+                "type": "uint256"
+              }
+            ],
+            "internalType": "struct MarketAsset.Asset[]",
+            "name": "assets",
+            "type": "tuple[]"
+          },
+          {
+            "internalType": "uint256",
+            "name": "expiredAt",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address",
+            "name": "paymentToken",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "startedAt",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "basePrice",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "endedAt",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "endedPrice",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "expectedState",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "nonce",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "marketFeePercentage",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct MarketOrder.Order",
+        "name": "_order",
+        "type": "tuple"
+      }
+    ],
+    "name": "settleOrder",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "_interface",
+        "type": "string"
+      },
+      {
+        "internalType": "bytes",
+        "name": "_data",
+        "type": "bytes"
+      }
+    ],
+    "name": "interactWith",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_hash",
+        "type": "bytes32"
+      },
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "maker",
+            "type": "address"
+          },
+          {
+            "internalType": "enum MarketOrder.OrderKind",
+            "name": "kind",
+            "type": "uint8"
+          },
+          {
+            "components": [
+              {
+                "internalType": "enum MarketAsset.TokenStandard",
+                "name": "erc",
+                "type": "uint8"
+              },
+              {
+                "internalType": "address",
+                "name": "addr",
+                "type": "address"
+              },
+              {
+                "internalType": "uint256",
+                "name": "id",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "quantity",
+                "type": "uint256"
+              }
+            ],
+            "internalType": "struct MarketAsset.Asset[]",
+            "name": "assets",
+            "type": "tuple[]"
+          },
+          {
+            "internalType": "uint256",
+            "name": "expiredAt",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address",
+            "name": "paymentToken",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "startedAt",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "basePrice",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "endedAt",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "endedPrice",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "expectedState",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "nonce",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "marketFeePercentage",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct MarketOrder.Order",
+        "name": "_order",
+        "type": "tuple"
+      }
+    ],
+    "name": "orderValid",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "maker",
+            "type": "address"
+          },
+          {
+            "internalType": "enum MarketOrder.OrderKind",
+            "name": "kind",
+            "type": "uint8"
+          },
+          {
+            "components": [
+              {
+                "internalType": "enum MarketAsset.TokenStandard",
+                "name": "erc",
+                "type": "uint8"
+              },
+              {
+                "internalType": "address",
+                "name": "addr",
+                "type": "address"
+              },
+              {
+                "internalType": "uint256",
+                "name": "id",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "quantity",
+                "type": "uint256"
+              }
+            ],
+            "internalType": "struct MarketAsset.Asset[]",
+            "name": "assets",
+            "type": "tuple[]"
+          },
+          {
+            "internalType": "uint256",
+            "name": "expiredAt",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address",
+            "name": "paymentToken",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "startedAt",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "basePrice",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "endedAt",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "endedPrice",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "expectedState",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "nonce",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "marketFeePercentage",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct MarketOrder.Order",
+        "name": "_order",
+        "type": "tuple"
+      }
+    ],
+    "name": "cancelOrder",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+]
