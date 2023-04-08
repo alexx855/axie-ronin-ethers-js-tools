@@ -44,5 +44,9 @@
   "bugs": {
     "url": "https://github.com/alexx855/axie-ronin-hardhat-task/issues"
   },
-  "homepage": "https://github.com/alexx855/axie-ronin-hardhat-task#readme"
+  "homepage": "https://github.com/alexx855/axie-ronin-hardhat-task#readme",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^2.0.2",
+    "hardhat": "^2.13.0"
+  }
 }
