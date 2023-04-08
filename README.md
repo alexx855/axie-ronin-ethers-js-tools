@@ -1,13 +1,28 @@
-# Sample Hardhat Project
+# Axie Ronin Hardhat Task
 
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, and a script that deploys that contract.
+This repository provides a set of Hardhat tasks that make it easier for developers to interact with their Axies on the Ronin network.
 
-Try running some of the following tasks:
+For example, you can easily list all your axies at once, buy an Axies from the marketplace, and view your account balances.
+
+## Available Hardhat tasks
+
+- `npx hardhat accounts` - lists the balances of all accounts that are available in the Hardhat network.
+- `npx hardhat generate-access-token` - generates a marketplace access token, which is required to interact with the Axie Ronin marketplace.
+- `npx hardhat listall` - lists all Axies on your account and calculates the price of each Axie based on similar listings and Axie rarity.
+- `npx hardhat list --axie $AXIE_ID --base-price 0.1 --ended-price 0.2 --duration 1` - lists a specific Axie on the marketplace, with a starting price, ending price, and duration.
+- `npx hardhat unlist --axie $AXIE_ID` - removes a specific Axie from the marketplace.
+- `npx hardhat buy --axie $AXIE_ID` - allows you to buy a specific Axie from the marketplace.
+
+### Try running some of the following tasks
 
 ```shell
 npx hardhat help
-npx hardhat test
-REPORT_GAS=true npx hardhat test
-npx hardhat node
-npx hardhat run scripts/deploy.ts
+npx hardhat test --network saigon
+npx hardhat run scripts/deploy.ts --network saigon
+npx hardhat account
+npx hardhat generate-access-token
+npx hardhat listall
+npx hardhat unlist --axie 123456
+npx hardhat list --axie 123456 --base-price 0.1 --ended-price 0.2 --duration 1
+npx hardhat buy --axie 123456
 ```
