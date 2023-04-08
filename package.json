@@ -2,9 +2,13 @@
   "name": "axie-ronin-hardhat-task",
   "version": "1.0.0",
   "description": "A set of Hardhat tasks that make it easier for developers to interact with their Axies on the Ronin network.",
-  "main": "index.js",
   "scripts": {
-    "test": "test"
+    "access-token": "npx hardhat generate-access-token",
+    "account": "npx hardhat account",
+    "listall": "npx hardhat listall",
+    "list": "npx hardhat list",
+    "unlist": "npx hardhat unlist",
+    "buy": "npx hardhat buy"
   },
   "repository": {
     "type": "git",
