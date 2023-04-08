@@ -1,0 +1,48 @@
+{
+  "name": "axie-ronin-hardhat-task",
+  "version": "1.0.0",
+  "description": "A set of Hardhat tasks that make it easier for developers to interact with their Axies on the Ronin network.",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alexx855/axie-ronin-hardhat-task.git"
+  },
+  "keywords": [
+    "Axie",
+    "Infinity",
+    "Axie",
+    "Ronin",
+    "Marketplace",
+    "Hardhat",
+    "Access",
+    "token",
+    "Account",
+    "balance",
+    "Buy",
+    "Axie",
+    "List",
+    "Axie",
+    "Unlist",
+    "Axie",
+    "Developer",
+    "tool",
+    "Crypto",
+    "gaming",
+    "Blockchain",
+    "NFT",
+    "Smart",
+    "contract."
+  ],
+  "author": {
+    "name": "Alex Pedersen",
+    "email": "hello@alexpedersen.dev"
+  },
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/alexx855/axie-ronin-hardhat-task/issues"
+  },
+  "homepage": "https://github.com/alexx855/axie-ronin-hardhat-task#readme"
+}
