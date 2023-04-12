@@ -51,6 +51,7 @@
   "homepage": "https://github.com/alexx855/axie-ronin-hardhat-task#readme",
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^2.0.2",
+    "@types/node": "^18.15.11",
     "hardhat": "^2.13.0"
   },
   "dependencies": {
