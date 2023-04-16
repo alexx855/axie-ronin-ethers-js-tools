@@ -1,23 +1,23 @@
 {
   "name": "axie-ronin-hardhat-task",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "A set of Hardhat tasks that make it easier for developers to interact with their Axies on the Ronin network.",
   "scripts": {
-    "access-token": "npx hardhat generate-access-token",
     "account": "npx hardhat account",
-    "listall": "npx hardhat listall",
-    "list": "npx hardhat list",
-    "unlist": "npx hardhat unlist",
-    "buy": "npx hardhat buy"
+    "list-all": "npx hardhat list-all --base-price 0.1",
+    "unlist-all": "npx hardhat unlist-all"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/alexx855/axie-ronin-hardhat-task.git"
   },
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "keywords": [
     "Axie",
     "Infinity",
-    "Axie",
+    "Bot",
     "Ronin",
     "Marketplace",
     "Hardhat",
@@ -26,11 +26,8 @@
     "Account",
     "balance",
     "Buy",
-    "Axie",
     "List",
-    "Axie",
     "Unlist",
-    "Axie",
     "Developer",
     "tool",
     "Crypto",
@@ -38,7 +35,7 @@
     "Blockchain",
     "NFT",
     "Smart",
-    "contract."
+    "contract"
   ],
   "author": {
     "name": "Alex Pedersen",
@@ -52,9 +49,10 @@
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^2.0.2",
     "@types/node": "^18.15.11",
-    "hardhat": "^2.13.0"
+    "hardhat": "^2.14.0"
   },
   "dependencies": {
-    "dotenv": "^16.0.3"
+    "dotenv": "^16.0.3",
+    "ethers": "^5.7.0"
   }
 }
