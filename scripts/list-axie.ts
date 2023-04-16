@@ -25,7 +25,7 @@ export default async function listAxie(taskArgs: {
     }
 
     const basePrice = hre.ethers.utils.parseUnits(taskArgs.basePrice, 'ether').toString()
-    const accessToken = await generateMartketplaceAccessToken(hre)
+
     const accounts = await hre.ethers.getSigners()
     const signer = accounts[0]
     const address = signer.address.toLowerCase()
@@ -260,6 +260,7 @@ export default async function listAxie(taskArgs: {
       signature
     }
 
+    const accessToken = await generateMartketplaceAccessToken(hre)
     const headers = {
       authorization: `Bearer ${accessToken}`
     }
