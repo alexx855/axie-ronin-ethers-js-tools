@@ -5,6 +5,8 @@ import sendRON from "./scripts/send-ron";
 import account from "./scripts/account";
 
 import * as dotenv from 'dotenv' // see https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
+import { listAxie } from "./scripts/list-axie";
+import { unlistAxie } from "./scripts/unlist-axie";
 dotenv.config()
 
 task('account', 'Get info of the deployer account', account)
@@ -15,6 +17,17 @@ task('send', 'send ron to account')
   .setAction(sendRON)
 
 task('generate-access-token', 'Generate marketplace access token', generateMartketplaceAccessToken)
+
+task('unlist', 'Unlist an axie on the marketplace')
+  .addParam('axie', 'The axie ID without #')
+  .setAction(unlistAxie)
+
+task('list', 'List an axie on the marketplace')
+  .addParam('axie', 'The axie ID without #')
+  .addParam('basePrice', 'The start price like the marketplace, example: 0.1')
+  .addOptionalParam('endedPrice', 'The end price like the marketplace, example: 0.01')
+  .addOptionalParam('duration', 'The duration of the aution in days')
+  .setAction(listAxie)
 
 // You need to export an object to set up your config
 // Go to https://hardhat.org/config/ to learn more
