@@ -7,6 +7,7 @@ import {
   CONTRACT_AXIE_ADDRESS,
   CONTRACT_AXIE_ABI_JSON_PATH,
 } from "./lib/constants";
+import { createAccessTokenWithSignature, getRandomMessage } from "./lib/utils";
 
 dotenv.config()
 
@@ -95,6 +96,32 @@ task('send', 'send ron to account')
     console.log('Tx:', tx.hash)
   } catch (error) {
     console.error(error)
+  }
+})
+
+task('generate-access-token', 'Generate marketplace access token', async (taskArgs, hre): Promise<string | false> => {
+  try {
+    const accounts = await hre.ethers.getSigners()
+    const signer = accounts[0]
+    const address = signer.address.toLowerCase()
+
+    const message = await getRandomMessage()
+    if (message === false) {
+      console.log('Error getting random message')
+      return false
+    }
+
+    const signature = await signer.signMessage(message)
+    const token = await createAccessTokenWithSignature(address, message, signature)
+    if (token === false) {
+      console.log('Error creating access token')
+      return false
+    }
+    console.log('Access token:', token)
+    return token
+  } catch (error) {
+    console.error(error)
+    return false
   }
 })
 
