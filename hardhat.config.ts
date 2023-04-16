@@ -3,10 +3,11 @@ import "@nomicfoundation/hardhat-toolbox";
 import generateMartketplaceAccessToken from "./scripts/generate-access-token";
 import sendRON from "./scripts/send-ron";
 import account from "./scripts/account";
+import listAxie from "./scripts/list-axie";
+import unlistAxie from "./scripts/unlist-axie";
+import getAxieIds from "./scripts/get-axies";
 
 import * as dotenv from 'dotenv' // see https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
-import { listAxie } from "./scripts/list-axie";
-import { unlistAxie } from "./scripts/unlist-axie";
 dotenv.config()
 
 task('account', 'Get info of the deployer account', account)

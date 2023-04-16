@@ -1,7 +1,7 @@
 import type { HardhatRuntimeEnvironment } from "hardhat/types"
 import { getRandomMessage, createAccessTokenWithSignature } from "../lib/utils"
 
-export default async function generateMartketplaceAccessToken(taskArgs: {}, hre: HardhatRuntimeEnvironment) {
+export default async function generateMartketplaceAccessToken(hre: HardhatRuntimeEnvironment) {
   try {
     const accounts = await hre.ethers.getSigners()
     const signer = accounts[0]
@@ -17,7 +17,7 @@ export default async function generateMartketplaceAccessToken(taskArgs: {}, hre:
     if (token === false) {
       return false
     }
-    console.log(token)
+    // console.log(token)
     return token
   } catch (error) {
     console.error(error)

@@ -4,7 +4,7 @@ import { apiRequest } from "../lib/utils"
 import * as fs from 'fs/promises'
 import { AvailableNetworks, CONTRACT_MARKETPLACE_V2_ABI_JSON_PATH, CONTRACT_MARKETPLACE_V2_ADDRESS, CONTRACT_WETH_ADDRESS } from "../lib/constants"
 
-export async function unlistAxie(taskArgs: { axie: string }, hre: HardhatRuntimeEnvironment) {
+export default async function unlistAxie(taskArgs: { axie: string }, hre: HardhatRuntimeEnvironment) {
   try {
     if (hre.network.name != 'ronin' && hre.network.name != 'saigon') {
       throw new Error('Network not supported')
@@ -104,7 +104,7 @@ export async function unlistAxie(taskArgs: { axie: string }, hre: HardhatRuntime
     const result = await apiRequest<IAxieOrderResult>(query, variables)
     // console.log('result', result)
     if (result === null || result.data === undefined || result.data.axie.order == null) {
-      console.log('Axie is not listed on the marketplace')
+      console.log(`Axie ${axieId} not listed`)
       return false
     }
 
@@ -146,9 +146,9 @@ export async function unlistAxie(taskArgs: { axie: string }, hre: HardhatRuntime
     )
 
     let tx = await marketplaceContract.interactWith('ORDER_EXCHANGE', cancelOrderData)
-    console.log('Axie unlisted', tx.hash)
     // wait for the transaction to be mined
     const receipt = await tx.wait()
+    console.log(`Axie ${axieId} unlisted, tx: ${receipt.transactionHash}`)
     return receipt.transactionHash
   } catch (error) {
     console.error(error)

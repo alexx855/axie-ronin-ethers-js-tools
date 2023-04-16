@@ -5,7 +5,7 @@ import { CONTRACT_MARKETPLACE_V2_ADDRESS, CONTRACT_WETH_ADDRESS, CONTRACT_AXIE_A
 import generateMartketplaceAccessToken from "./generate-access-token"
 import * as fs from 'fs/promises'
 
-export async function listAxie(taskArgs: {
+export default async function listAxie(taskArgs: {
   axie: string
   basePrice: string
   endedPrice?: string
@@ -25,7 +25,7 @@ export async function listAxie(taskArgs: {
     }
 
     const basePrice = hre.ethers.utils.parseUnits(taskArgs.basePrice, 'ether').toString()
-    const accessToken = await generateMartketplaceAccessToken({}, hre)
+    const accessToken = await generateMartketplaceAccessToken(hre)
     const accounts = await hre.ethers.getSigners()
     const signer = accounts[0]
     const address = signer.address.toLowerCase()
@@ -40,7 +40,6 @@ export async function listAxie(taskArgs: {
     const axieABI = JSON.parse(await fs.readFile(CONTRACT_AXIE_ABI_JSON_PATH, 'utf8'))
     const axieContract = await new hre.ethers.Contract(CONTRACT_AXIE_ADDRESS[network], axieABI, signer)
     const isApproved = await axieContract.isApprovedForAll(address, CONTRACT_MARKETPLACE_V2_ADDRESS[network])
-    console.log('Axie Contract Approved:', isApproved)
 
     if (!isApproved) {
       console.log('Approving Axie Contract')
@@ -330,7 +329,7 @@ export async function listAxie(taskArgs: {
       return false
     }
 
-    console.log('Order created result:', activityResult.data.createActivity.result)
+    console.log(`Axie ${axieId} listed for ${taskArgs.basePrice} ETH`)
     return activityResult.data.createActivity.result
   } catch (error: any) {
     console.error(error)
