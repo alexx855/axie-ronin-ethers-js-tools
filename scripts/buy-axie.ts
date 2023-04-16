@@ -141,17 +141,6 @@ export default async function buyAxie(taskArgs: {
       signer
     )
 
-    // check if the account has given approval to the marketplace contract to transfer the axie
-    const isApproved: boolean = await axieContract.isApprovedForAll(address, CONTRACT_MARKETPLACE_V2_ADDRESS[network])
-    if (!isApproved) {
-      console.log('Please approve the marketplace contract to transfer the axie')
-      // Approve the marketplace contract to transfer the axie
-      const tx = await axieContract.setApprovalForAll(CONTRACT_MARKETPLACE_V2_ADDRESS[network], true)
-      // wait for tx to be mined and get receipt
-      const receipt = await tx.wait()
-      console.log('Receipt:', receipt.transactionHash)
-    }
-
     // check if have enough balance
     const balance = await hre.ethers.provider.getBalance(address)
     const currentPrice = hre.ethers.BigNumber.from(order.currentPrice)
