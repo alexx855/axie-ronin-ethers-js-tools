@@ -6,6 +6,7 @@ import account from "./scripts/account";
 import listAxie from "./scripts/list-axie";
 import unlistAxie from "./scripts/unlist-axie";
 import getAxieIds from "./scripts/get-axies";
+import buyAxie from "./scripts/buy-axie";
 
 import * as dotenv from 'dotenv' // see https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
 dotenv.config()
@@ -17,7 +18,9 @@ task('send', 'send ron to account')
   .addParam('ammount', 'The amount of RON to send')
   .setAction(sendRON)
 
-task('generate-access-token', 'Generate marketplace access token', generateMartketplaceAccessToken)
+task('buy', 'Buy an axie on the marketplace')
+  .addParam('axie', 'The axie ID without #')
+  .setAction(buyAxie)
 
 task('unlist', 'Unlist an axie on the marketplace')
   .addParam('axie', 'The axie ID without #')
