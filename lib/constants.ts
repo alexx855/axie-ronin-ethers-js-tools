@@ -1,3 +1,5 @@
+export type AvailableNetworks = 'ronin' | 'saigon'
+
 export const GRAPHQL_URL = 'https://graphql-gateway.axieinfinity.com/graphql'
 
 export const CONTRACT_AXIE_ABI_JSON_PATH = 'lib/abis/axie.json'
