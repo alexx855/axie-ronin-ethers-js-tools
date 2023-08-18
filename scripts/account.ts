@@ -2,16 +2,11 @@ import type { HardhatRuntimeEnvironment } from "hardhat/types"
 import { CONTRACT_AXIE_ABI_JSON_PATH, CONTRACT_WETH_ADDRESS, CONTRACT_AXIE_ADDRESS, AvailableNetworks } from "../lib/constants"
 import * as fs from 'fs/promises'
 
-export default async function account(taskArgs: {
-  to: string
-  amount: string
-}, hre: HardhatRuntimeEnvironment) {
+export default async function account(taskArgs: {}, hre: HardhatRuntimeEnvironment) {
   if (hre.network.name != 'ronin' && hre.network.name != 'saigon') {
     throw new Error('Network not supported')
   }
-
   const network: AvailableNetworks = hre.network.name
-
   try {
     const accounts = await hre.ethers.getSigners()
     const signer = accounts[0]
