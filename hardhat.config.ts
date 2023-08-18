@@ -9,9 +9,13 @@ import getAxieIds from "./scripts/get-axies";
 import buyAxie from "./scripts/buy-axie";
 
 import * as dotenv from 'dotenv' // see https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
+import listAllAxies from "./scripts/list-all-axies";
+import unlistAllAxies from "./scripts/unlist-all-axies";
 dotenv.config()
 
-task('account', 'Get info of the deployer account', account)
+task('account', 'Get account info')
+  .addOptionalParam('address', 'The address to get info, default is the first account')
+  .setAction(account)
 
 task('send', 'send ron to account')
   .addParam('to', 'The address to send RON')
@@ -37,38 +41,10 @@ task('list-all', 'List all axies on the marketplace')
   .addParam('basePrice', 'The start price like the marketplace, example: 0.1')
   .addOptionalParam('endedPrice', 'The end price like the marketplace, example: 0.01')
   .addOptionalParam('duration', 'The duration of the aution in days')
-  .setAction(async (taskArgs: {
-    basePrice: string
-    endedPrice?: string
-    duration?: string
-    gasLimit?: number
-  }, hre) => {
-    // get address
-    const accounts = await hre.ethers.getSigners()
-    const signer = accounts[0]
-    const address = signer.address.toLowerCase()
-    console.log(`Listing all axies of ${address.replace('0x', 'ronin:')}`)
+  .setAction(listAllAxies)
 
-    const axieIds = await getAxieIds(hre)
-    for (let i = 0; i < axieIds.length; i++) {
-      const axieId = axieIds[i]
-      await listAxie({ axie: axieId.toString(), ...taskArgs }, hre)
-    }
-  })
-
-task('unlist-all', 'Unlist all axies on the marketplace', async (taskArgs: {}, hre) => {
-  // get address
-  const accounts = await hre.ethers.getSigners()
-  const signer = accounts[0]
-  const address = signer.address.toLowerCase()
-  console.log(`Unlisting all axies of ${address.replace('0x', 'ronin:')}`)
-
-  const axieIds = await getAxieIds(hre)
-  for (let i = 0; i < axieIds.length; i++) {
-    const axieId = axieIds[i]
-    await unlistAxie({ axie: axieId.toString() }, hre)
-  }
-})
+task('unlist-all', 'Unlist all axies on the marketplace')
+  .setAction(unlistAllAxies)
 
 // You need to export an object to set up your config
 // Go to https://hardhat.org/config/ to learn more
