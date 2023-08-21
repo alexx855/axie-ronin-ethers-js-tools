@@ -1,6 +1,13 @@
 import type { HardhatRuntimeEnvironment } from "hardhat/types"
-import { CONTRACT_AXIE_ABI_JSON_PATH, CONTRACT_WETH_ADDRESS, CONTRACT_AXIE_ADDRESS, AvailableNetworks } from "../lib/constants"
 import * as fs from 'fs/promises'
+import {
+  CONTRACT_AXIE_ABI_JSON_PATH,
+  CONTRACT_WETH_ADDRESS,
+  CONTRACT_AXIE_ADDRESS,
+  AvailableNetworks,
+  CONTRACT_USDC_ADDRESS,
+  CONTRACT_USDC_ABI_JSON_PATH,
+} from "../lib/constants"
 
 export default async function account(taskArgs: {}, hre: HardhatRuntimeEnvironment) {
   if (hre.network.name != 'ronin' && hre.network.name != 'saigon') {
@@ -34,8 +41,8 @@ export default async function account(taskArgs: {}, hre: HardhatRuntimeEnvironme
     console.log('Axies:', hre.ethers.BigNumber.from(axiesBalance).toString())
 
     // get USDC balance
-    const usdcABI = JSON.parse(await fs.readFile(CONTRACT_AXIE_ABI_JSON_PATH, 'utf8'))
-    const usdcContract = new hre.ethers.Contract(CONTRACT_WETH_ADDRESS[network], usdcABI, signer)
+    const usdcABI = JSON.parse(await fs.readFile(CONTRACT_USDC_ABI_JSON_PATH, 'utf8'))
+    const usdcContract = new hre.ethers.Contract(CONTRACT_USDC_ADDRESS[network], usdcABI, signer)
     const usdcBalance = await usdcContract.balanceOf(address)
     const usdcBalanceInEther = hre.ethers.utils.formatUnits(usdcBalance, 6)
     console.log('USDC balance: ', usdcBalanceInEther)

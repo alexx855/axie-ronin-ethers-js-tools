@@ -26,9 +26,9 @@ export const CONTRACT_AXS_ADDRESS = {
   'saigon': '0x3c4e17b9056272ce1b49f6900d8cfd6171a1869d'
 }
 
-export const CONTRACT_USDC_ABI_JSON_PATH = 'lib/abis/weth.json'
+export const CONTRACT_USDC_ABI_JSON_PATH = 'lib/abis/usdc.json'
 export const CONTRACT_USDC_ADDRESS = {
-  'ronin': '',
+  'ronin': '0x0b7007c13325c48911f73a2dad5fa5dcbf808adc',
   'saigon': '0x067fbff8990c58ab90bae3c97241c5d736053f77'
 }
 
