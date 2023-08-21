@@ -1,6 +1,6 @@
 
 import listAxie from "./list-axie"
-import getAxieIds from "./get-axies"
+import getAxieIds from "./get-axie"
 import { HardhatRuntimeEnvironment } from "hardhat/types"
 
 export default async function listAllAxies(taskArgs: {

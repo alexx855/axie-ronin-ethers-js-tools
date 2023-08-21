@@ -1,6 +1,6 @@
 
 import { HardhatRuntimeEnvironment } from "hardhat/types"
-import getAxieIds from "./get-axies"
+import getAxieIds from "./get-axie"
 import unlistAxie from "./unlist-axie"
 
 export default async function unlistAllAxies(taskArgs: {}, hre: HardhatRuntimeEnvironment) {

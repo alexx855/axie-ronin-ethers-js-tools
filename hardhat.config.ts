@@ -1,16 +1,16 @@
 import { HardhatUserConfig, task } from "hardhat/config";
 import "@nomicfoundation/hardhat-toolbox";
-import generateMartketplaceAccessToken from "./scripts/generate-access-token";
-import sendRON from "./scripts/send-ron";
-import account from "./scripts/account";
-import listAxie from "./scripts/list-axie";
-import unlistAxie from "./scripts/unlist-axie";
-import getAxieIds from "./scripts/get-axies";
-import buyAxie from "./scripts/buy-axie";
+import {
+  sendRON,
+  account,
+  listAxie,
+  unlistAxie,
+  buyAxie,
+  listAllAxies,
+  unlistAllAxies,
+} from './main'
 
 import * as dotenv from 'dotenv' // see https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
-import listAllAxies from "./scripts/list-all-axies";
-import unlistAllAxies from "./scripts/unlist-all-axies";
 dotenv.config()
 
 task('account', 'Get account info')

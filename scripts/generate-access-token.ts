@@ -1,6 +1,7 @@
 import type { HardhatRuntimeEnvironment } from "hardhat/types"
 import { getRandomMessage, createAccessTokenWithSignature } from "../lib/utils"
 
+// TODO: get new method, this is deprecated
 export default async function generateMartketplaceAccessToken(hre: HardhatRuntimeEnvironment) {
   try {
     const accounts = await hre.ethers.getSigners()
