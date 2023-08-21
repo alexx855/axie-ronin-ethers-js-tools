@@ -2,7 +2,7 @@
 import type { HardhatRuntimeEnvironment } from "hardhat/types"
 import { apiRequest } from "../lib/utils"
 import * as fs from 'fs/promises'
-import { AvailableNetworks, CONTRACT_MARKETPLACE_V2_ABI_JSON_PATH, CONTRACT_MARKETPLACE_V2_ADDRESS, CONTRACT_WETH_ADDRESS } from "../lib/constants"
+import { AvailableNetworks, CONTRACT_MARKETPLACE_V2_ABI_JSON_PATH, CONTRACT_MARKETPLACE_V2_ADDRESS, CONTRACT_WETH_ADDRESS, GRAPHQL_URL } from "../lib/constants"
 
 export default async function unlistAxie(taskArgs: { axie: string }, hre: HardhatRuntimeEnvironment) {
   try {
@@ -101,8 +101,7 @@ export default async function unlistAxie(taskArgs: { axie: string }, hre: Hardha
       }
     }
 
-    const result = await apiRequest<IAxieOrderResult>(query, variables)
-    // console.log('result', result)
+    const result = await apiRequest<IAxieOrderResult>(GRAPHQL_URL, JSON.stringify({ query, variables }))
     if (result === null || result.data === undefined || result.data.axie.order == null) {
       console.log(`Axie ${axieId} not listed`)
       return false

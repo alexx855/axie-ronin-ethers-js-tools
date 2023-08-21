@@ -1,7 +1,7 @@
 
 import type { HardhatRuntimeEnvironment } from "hardhat/types"
 import { apiRequest } from "../lib/utils"
-import { CONTRACT_MARKETPLACE_V2_ADDRESS, CONTRACT_WETH_ADDRESS, CONTRACT_AXIE_ADDRESS, AvailableNetworks, CONTRACT_AXIE_ABI_JSON_PATH } from "../lib/constants"
+import { CONTRACT_MARKETPLACE_V2_ADDRESS, CONTRACT_WETH_ADDRESS, CONTRACT_AXIE_ADDRESS, AvailableNetworks, CONTRACT_AXIE_ABI_JSON_PATH, GRAPHQL_URL } from "../lib/constants"
 import generateMartketplaceAccessToken from "./generate-access-token"
 import * as fs from 'fs/promises'
 
@@ -275,8 +275,7 @@ export default async function listAxie(taskArgs: {
       }>
     }
     // send the create order mutation
-    const result = await apiRequest<ICreateOrderResult>(query, variables, headers)
-    // console.log('result', result)
+    const result = await apiRequest<ICreateOrderResult>(GRAPHQL_URL, JSON.stringify({ query, variables }), headers)
     if (result === null) {
       console.log('Error creating order')
       return false
@@ -317,8 +316,7 @@ export default async function listAxie(taskArgs: {
       }>
     }
 
-    const activityResult = await apiRequest<IActivityResult>(activityQuery, activityVariables, headers)
-    // console.log('activityResult', activityResult)
+    const activityResult = await apiRequest<IActivityResult>(GRAPHQL_URL, JSON.stringify({ query: activityQuery, variables: activityVariables }), headers)
 
     if (activityResult === null || activityResult.data === undefined) {
       console.log('Error creating activity')

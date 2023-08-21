@@ -1,9 +1,9 @@
 
 import type { HardhatRuntimeEnvironment } from "hardhat/types"
 import { apiRequest } from "../lib/utils"
-import { CONTRACT_MARKETPLACE_V2_ADDRESS, CONTRACT_WETH_ADDRESS, CONTRACT_AXIE_ADDRESS, CONTRACT_AXIE_ABI_JSON_PATH, CONTRACT_MARKETPLACE_V2_ABI_JSON_PATH, CONTRACT_WETH_ABI_JSON_PATH, GRAPHQL_URL, DEFAULT_GAS_LIMIT } from "../lib/constants"
-import type { AvailableNetworks } from "../lib/constants"
+import { CONTRACT_MARKETPLACE_V2_ADDRESS, CONTRACT_WETH_ADDRESS, CONTRACT_AXIE_ADDRESS, CONTRACT_AXIE_ABI_JSON_PATH, CONTRACT_MARKETPLACE_V2_ABI_JSON_PATH, CONTRACT_WETH_ABI_JSON_PATH, GRAPHQL_URL, DEFAULT_GAS_LIMIT, AvailableNetworks } from "../lib/constants"
 import * as fs from 'fs/promises'
+
 
 export default async function buyAxie(taskArgs: {
   axie: string
@@ -122,7 +122,7 @@ export default async function buyAxie(taskArgs: {
       axieId
     }
 
-    const results = await apiRequest<IGetAxieDetail>(query, variables)
+    const results = await apiRequest<IGetAxieDetail>(GRAPHQL_URL, JSON.stringify({ query, variables }))
     const order = results.data?.axie.order
     if (!order) {
       console.log('No order found')

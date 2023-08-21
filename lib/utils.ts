@@ -1,13 +1,16 @@
-import { GRAPHQL_URL } from "./constants"
-
-export async function apiRequest<T>(query: string, variables: { [key: string]: any }, headers?: { [key: string]: any }) {
-  const response = await fetch(GRAPHQL_URL, {
-    method: 'POST',
+export async function apiRequest<T>(
+  url: string,
+  body: BodyInit | null = null,
+  headers: Record<string, string> = {},
+  method: 'GET' | 'POST' = 'POST',
+) {
+  const response = await fetch(url, {
+    method,
     headers: {
       'Content-Type': 'application/json',
       ...headers
     },
-    body: JSON.stringify({ query, variables })
+    ...(method === 'GET' ? {} : { body })
   })
 
   const res: T = await response.json()
