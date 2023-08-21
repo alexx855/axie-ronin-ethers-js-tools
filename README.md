@@ -31,6 +31,9 @@ npx hardhat send --to 0x1234 --amount 1
 npx hardhat list-all
 npx hardhat list --axie 123456 --base-price 0.1 --ended-price 0.2 --duration 1
 npx hardhat list --axie 123456 --base-price 0.1 
+npx hardhat transfer-axie --axie 11683317 --address ronin:6e42b2baab99084a6ae3ee397c6bedce6fbad47f
+npx hardhat transfer-all-axies --address ronin:6e42b2baab99084a6ae3ee397c6bedce6fbad47f
+npx hardhat transfer-all-axies --axies "11683317,10947093" --address ronin:6e42b2baab99084a6ae3ee397c6bedce6fbad47f
 npx hardhat unlist --axie 123456
 npx hardhat unlist-all
 npx hardhat buy --axie 123456
