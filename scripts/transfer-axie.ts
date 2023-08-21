@@ -1,6 +1,6 @@
 
 import type { HardhatRuntimeEnvironment } from "hardhat/types"
-import { CONTRACT_AXIE_ADDRESS, CONTRACT_AXIE_ABI_JSON_PATH } from "../lib/constants"
+import { CONTRACT_AXIE_ADDRESS, CONTRACT_AXIE_ABI_JSON_PATH, AvailableNetworks } from "../lib/constants"
 import * as fs from 'fs/promises'
 
 export default async function transferAxie(taskArgs: {
@@ -8,10 +8,10 @@ export default async function transferAxie(taskArgs: {
   axie: string
 }, hre: HardhatRuntimeEnvironment) {
 
-  const network = hre.network.name
-  if (network != 'ronin' && network != 'saigon') {
+  if (hre.network.name != 'ronin' && hre.network.name != 'saigon') {
     throw new Error('Network not supported')
   }
+  const network: AvailableNetworks = hre.network.name
 
   try {
     const accounts = await hre.ethers.getSigners()

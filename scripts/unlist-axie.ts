@@ -9,7 +9,6 @@ export default async function unlistAxie(taskArgs: { axie: string }, hre: Hardha
     if (hre.network.name != 'ronin' && hre.network.name != 'saigon') {
       throw new Error('Network not supported')
     }
-
     const network: AvailableNetworks = hre.network.name
 
     const axieId = parseInt(taskArgs.axie, 10)

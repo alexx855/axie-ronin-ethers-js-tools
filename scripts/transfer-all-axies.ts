@@ -1,6 +1,6 @@
 
 import type { HardhatRuntimeEnvironment } from "hardhat/types"
-import { CONTRACT_AXIE_ADDRESS, CONTRACT_AXIE_ABI_JSON_PATH, CONTRACT_ERC721_BATCH_TRANSFER_ADDRESS, CONTRACT_ERC721_BATCH_TRANSFER_ABI_JSON_PATH } from "../lib/constants"
+import { CONTRACT_AXIE_ADDRESS, CONTRACT_AXIE_ABI_JSON_PATH, CONTRACT_ERC721_BATCH_TRANSFER_ADDRESS, CONTRACT_ERC721_BATCH_TRANSFER_ABI_JSON_PATH, AvailableNetworks } from "../lib/constants"
 import * as fs from 'fs/promises'
 import { ethers } from "ethers"
 
@@ -9,10 +9,10 @@ export default async function transferAllAxies(taskArgs: {
   axies: string
 }, hre: HardhatRuntimeEnvironment) {
 
-  const network = hre.network.name
-  if (network != 'ronin' && network != 'saigon') {
+  if (hre.network.name != 'ronin' && hre.network.name != 'saigon') {
     throw new Error('Network not supported')
   }
+  const network: AvailableNetworks = hre.network.name
 
   try {
     const accounts = await hre.ethers.getSigners()
