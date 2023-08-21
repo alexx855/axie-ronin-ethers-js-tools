@@ -8,6 +8,8 @@ import {
   buyAxie,
   listAllAxies,
   unlistAllAxies,
+  transferAxie,
+  transferAllAxies,
 } from './main'
 
 import * as dotenv from 'dotenv' // see https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
@@ -45,6 +47,16 @@ task('list-all', 'List all axies on the marketplace')
 
 task('unlist-all', 'Unlist all axies on the marketplace')
   .setAction(unlistAllAxies)
+
+task('transfer-axie', 'Transfer an axie to another account address')
+  .addParam('axie', 'The axie ID without #')
+  .addParam('address', 'The address to transfer the axie to')
+  .setAction(transferAxie)
+
+task('transfer-all-axies', 'Transfer all axies to another account address')
+  .addParam('address', 'The address to transfer the axie to')
+  .addOptionalParam('axies', 'The axies ID without #, separated by comma')
+  .setAction(transferAllAxies)
 
 // You need to export an object to set up your config
 // Go to https://hardhat.org/config/ to learn more

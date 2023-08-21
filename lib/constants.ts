@@ -53,17 +53,17 @@ export const CONTRACT_MARKETPLACE_V2_ADDRESS = {
 export const CONTRACT_AXIE_GENES_BREWER_ABI_JSON_PATH = 'lib/abis/genes_brewer.json'
 export const CONTRACT_AXIE_GENES_BREWER_ADDRESS = {
   'ronin': '0x54e91daf9362900f94d32bd084beff4bdb73ea62',
-  // 'saigon': ''
+  'saigon': ''
 }
 
 export const CONTRACT_MULTICALL_ABI_JSON_PATH = 'lib/abis/multicall.json'
 export const CONTRACT_MULTICALL_ADDRESS = {
   'ronin': '0xc76d0d0d3aa608190f78db02bf2f5aef374fc0b9',
-  // 'saigon': ''
+  'saigon': ''
 }
 
 export const CONTRACT_ERC721_BATCH_TRANSFER_ABI_JSON_PATH = 'lib/abis/erc721_batch_transfer.json'
 export const CONTRACT_ERC721_BATCH_TRANSFER_ADDRESS = {
   'ronin': '0x2368dfed532842db89b470fde9fd584d48d4f644',
-  // 'saigon': ''
+  'saigon': ''
 }

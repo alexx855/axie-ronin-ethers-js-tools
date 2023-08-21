@@ -7,5 +7,7 @@ export { default as listAxie } from './scripts/list-axie';
 export { default as sendRON } from './scripts/send-ron';
 export { default as unlistAllAxies } from './scripts/unlist-all-axies';
 export { default as unlistAxie } from './scripts/unlist-axie';
+export { default as transferAllAxies } from './scripts/transfer-all-axies';
+export { default as transferAxie } from './scripts/transfer-axie';
 
 
