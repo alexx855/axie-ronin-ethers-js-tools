@@ -7,6 +7,7 @@ import {
   AvailableNetworks,
   CONTRACT_USDC_ADDRESS,
   CONTRACT_USDC_ABI_JSON_PATH,
+  CONTRACT_WETH_ABI_JSON_PATH,
 } from "../lib/constants"
 
 export default async function account(taskArgs: {}, hre: HardhatRuntimeEnvironment) {
@@ -26,7 +27,7 @@ export default async function account(taskArgs: {}, hre: HardhatRuntimeEnvironme
     console.log('RON:', balanceInEther)
 
     // get WETH balance
-    const wethABI = JSON.parse(await fs.readFile(CONTRACT_AXIE_ABI_JSON_PATH, 'utf8'))
+    const wethABI = JSON.parse(await fs.readFile(CONTRACT_WETH_ABI_JSON_PATH, 'utf8'))
     const wethContract = new hre.ethers.Contract(CONTRACT_WETH_ADDRESS[network], wethABI, signer)
     const wethBalance = await wethContract.balanceOf(address)
     const wethBalanceInEther = hre.ethers.utils.formatEther(wethBalance)
@@ -44,8 +45,8 @@ export default async function account(taskArgs: {}, hre: HardhatRuntimeEnvironme
     const usdcABI = JSON.parse(await fs.readFile(CONTRACT_USDC_ABI_JSON_PATH, 'utf8'))
     const usdcContract = new hre.ethers.Contract(CONTRACT_USDC_ADDRESS[network], usdcABI, signer)
     const usdcBalance = await usdcContract.balanceOf(address)
-    const usdcBalanceInEther = hre.ethers.utils.formatUnits(usdcBalance, 6)
-    console.log('USDC balance: ', usdcBalanceInEther)
+    const usdcBalanceFormated = hre.ethers.utils.formatUnits(usdcBalance, 6)
+    console.log('USDC balance: ', usdcBalanceFormated)
   } catch (error) {
     console.error(error)
   }
