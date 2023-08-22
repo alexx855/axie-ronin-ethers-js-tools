@@ -1,16 +1,15 @@
 import { HardhatUserConfig, task } from "hardhat/config";
 import "@nomicfoundation/hardhat-toolbox";
-import {
-  sendRON,
-  account,
-  listAxie,
-  unlistAxie,
-  buyAxie,
-  listAllAxies,
-  unlistAllAxies,
-  transferAxie,
-  transferAllAxies,
-} from './main'
+import account from "./scripts/account";
+import buyAxie from "./scripts/buy-axie";
+import listAllAxies from "./scripts/list-all-axies";
+import listAxie from "./scripts/list-axie";
+import sendRON from "./scripts/send-ron";
+import transferAllAxies from "./scripts/transfer-all-axies";
+import transferAxie from "./scripts/transfer-axie";
+import unlistAllAxies from "./scripts/unlist-all-axies";
+import unlistAxie from "./scripts/unlist-axie";
+import generateMartketplaceAccessToken from "./scripts/hardhat/generate-access-token";
 
 import * as dotenv from 'dotenv' // see https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
 dotenv.config()
@@ -18,6 +17,9 @@ dotenv.config()
 task('account', 'Get account info')
   .addOptionalParam('address', 'The address to get info, default is the first account')
   .setAction(account)
+
+task('generate-access-token', 'Generate an access token for the marketplace')
+  .setAction(({ }, hre) => generateMartketplaceAccessToken(hre))
 
 task('send', 'send ron to account')
   .addParam('to', 'The address to send RON')
@@ -66,12 +68,18 @@ const config: HardhatUserConfig = {
   networks: {
     ronin: {
       chainId: 2020,
-      url: 'https://api.roninchain.com/rpc',
+      url: 'https://api-gateway.skymavis.com/rpc',
+      httpHeaders: {
+        'x-api-key': process.env.SKIMAVIS_DAPP_KEY!
+      },
       accounts: [process.env.PRIVATE_KEY!]
     },
     saigon: {
       chainId: 2021,
       url: 'https://saigon-testnet.roninchain.com/rpc',
+      httpHeaders: {
+        'x-api-key': process.env.SKIMAVIS_DAPP_KEY!
+      },
       accounts: [process.env.PRIVATE_KEY!]
     }
   }
