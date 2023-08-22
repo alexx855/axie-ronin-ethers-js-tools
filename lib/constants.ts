@@ -1,6 +1,6 @@
 export type AvailableNetworks = 'ronin' | 'saigon'
-export const DEFAULT_GAS_LIMIT = 581338
-export const GRAPHQL_URL = 'https://graphql-gateway.axieinfinity.com/graphql'
+export const DEFAULT_GAS_LIMIT = '58133800000' // 58133.8 Gwei
+export const GRAPHQL_URL = 'https://api-gateway.skymavis.com/graphql/marketplace'
 
 export const CONTRACT_AXIE_ABI_JSON_PATH = 'lib/abis/axie.json'
 export const CONTRACT_AXIE_ADDRESS = {
