@@ -1,15 +1,18 @@
 {
-  "name": "axie-ronin-hardhat-task",
-  "version": "1.0.2",
-  "description": "A set of Hardhat tasks that make it easier for developers to interact with their Axies on the Ronin network.",
+  "name": "axie-ronin-ethers-js-tools",
+  "version": "1.0.9",
+  "description": "A set of functions that make it easier for developers to interact with their Axies on the Ronin network and the maketplace.",
   "scripts": {
+    "build": "tsc",
+    "test": "npx hardhat test",
     "account": "npx hardhat account",
-    "list-all": "npx hardhat list-all --base-price 0.1",
-    "unlist-all": "npx hardhat unlist-all"
+    "access-token": "npx hardhat generate-access-token"
   },
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/alexx855/axie-ronin-hardhat-task.git"
+    "url": "git+https://github.com/alexx855/axie-ronin-ethers-js-tools.git"
   },
   "engines": {
     "node": ">=18.0.0"
@@ -21,38 +24,37 @@
     "Ronin",
     "Marketplace",
     "Hardhat",
-    "Access",
-    "token",
+    "Access Token",
     "Account",
-    "balance",
     "Buy",
-    "List",
+    "Order",
     "Unlist",
     "Developer",
-    "tool",
+    "Tool",
     "Crypto",
-    "gaming",
     "Blockchain",
-    "NFT",
-    "Smart",
-    "contract"
+    "Javascript",
+    "Typescript",
+    "NFT"
   ],
   "author": {
     "name": "Alex Pedersen",
-    "email": "hello@alexpedersen.dev"
+    "email": "hello@alexpedersen.dev",
+    "url": "https://alexpedersen.dev"
   },
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/alexx855/axie-ronin-hardhat-task/issues"
+    "url": "https://github.com/alexx855/axie-ronin-ethers-js-tools/issues"
   },
-  "homepage": "https://github.com/alexx855/axie-ronin-hardhat-task#readme",
+  "homepage": "https://github.com/alexx855/axie-ronin-ethers-js-tools#readme",
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^2.0.2",
     "@types/node": "^18.15.11",
-    "hardhat": "^2.14.0"
+    "hardhat": "^2.14.0",
+    "dotenv": "^16.0.3"
   },
   "dependencies": {
-    "dotenv": "^16.0.3",
-    "ethers": "^5.7.0"
+    "ethers": "^5.7.0",
+    "typescript": "^5.1.6"
   }
 }

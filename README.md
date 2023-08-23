@@ -34,7 +34,7 @@ await wallet.connect(provider)
 ### Generate a marketplace access token, which is required to interact with the marketplace
 
 ```typescript
-import { generateAccessTokenMessage, exchangeToken } from 'axie-ronin-hardhat-task';
+import { generateAccessTokenMessage, exchangeToken } from 'axie-ronin-ethers-js-tools';
 
 const getMarketplaceAccessToken = async (): Promise<string> => {
   // Get address from signer
@@ -92,7 +92,7 @@ const createAxieSale = async () => {
 ### Unlist an axie from the marketplace
 
 ```typescript
-import { cancelMarketplaceOrder } from "axie-ronin-hardhat-task";
+import { cancelMarketplaceOrder } from "axie-ronin-ethers-js-tools";
 
 const cancelAxieSale = async (axieId: number) => {
     // Wait for the transaction to be mined
@@ -105,7 +105,7 @@ const cancelAxieSale = async (axieId: number) => {
 ### Buy an axie
 
 ```typescript
-import { buyMarketplaceOrder } from "axie-ronin-hardhat-task";
+import { buyMarketplaceOrder } from "axie-ronin-ethers-js-tools";
 
 const buyAxieFromMarketplace = async (axieId: number) => {
   // Get address from wallet
@@ -122,7 +122,7 @@ This will transfer all axies ids from the wallet to the specified address, it us
 
 
 ```typescript
-import { getAxieIdsFromAccount, batchTransferAxies } from "axie-ronin-hardhat-task";
+import { getAxieIdsFromAccount, batchTransferAxies } from "axie-ronin-ethers-js-tools";
 
 const batchTransferAllAxies = async (addressTo:string) => {
   // Get address from wallet

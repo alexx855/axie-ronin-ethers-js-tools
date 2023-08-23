@@ -17,6 +17,17 @@ export interface ICreateOrderData {
   expiredAt: number
 }
 
+export interface ICreateOrderResult {
+  data?: {
+    createOrder: {
+      hash: string
+    }
+  }
+  errors?: Array<{
+    message: string
+  }>
+}
+
 // check and approve the axie contract to transfer axies from address to the marketplace contract
 export default async function createMarketplaceOrder(
   orderData: ICreateOrderData,
@@ -218,16 +229,7 @@ export default async function createMarketplaceOrder(
     signature
   }
 
-  interface ICreateOrderResult {
-    data?: {
-      createOrder: {
-        hash: string
-      }
-    }
-    errors?: Array<{
-      message: string
-    }>
-  }
+
 
   const headers = {
     'authorization': `Bearer ${accessToken}`,
