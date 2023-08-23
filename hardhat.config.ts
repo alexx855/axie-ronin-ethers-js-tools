@@ -9,7 +9,7 @@ import transferAllAxies from "./scripts/transfer-all-axies";
 import transferAxie from "./scripts/transfer-axie";
 import unlistAllAxies from "./scripts/unlist-all-axies";
 import unlistAxie from "./scripts/unlist-axie";
-import generateMartketplaceAccessToken from "./scripts/hardhat/generate-access-token";
+import generateMartketplaceAccessToken from "./scripts/generate-access-token";
 
 import * as dotenv from 'dotenv' // see https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
 dotenv.config()
@@ -19,7 +19,7 @@ task('account', 'Get account info')
   .setAction(account)
 
 task('generate-access-token', 'Generate an access token for the marketplace')
-  .setAction(({ }, hre) => generateMartketplaceAccessToken(hre))
+  .setAction(generateMartketplaceAccessToken)
 
 task('send', 'send ron to account')
   .addParam('to', 'The address to send RON')

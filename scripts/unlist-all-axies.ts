@@ -1,6 +1,6 @@
 
 import { HardhatRuntimeEnvironment } from "hardhat/types"
-import getAxieIds from "./get-axie"
+import { getAxieIdsFromAccount } from "../lib/axie"
 import unlistAxie from "./unlist-axie"
 
 export default async function unlistAllAxies(taskArgs: {}, hre: HardhatRuntimeEnvironment) {
@@ -10,11 +10,10 @@ export default async function unlistAllAxies(taskArgs: {}, hre: HardhatRuntimeEn
   const address = signer.address.toLowerCase()
   console.log(`Unlisting all axies of ${address.replace('0x', 'ronin:')}`)
 
-  // get axie ids
-  const axieIds = await getAxieIds(hre)
+  // get axie ids from the account
+  const axieIds = await getAxieIdsFromAccount(address, signer)
   for (let i = 0; i < axieIds.length; i++) {
-    const axieId = axieIds[i]
-
-    await unlistAxie({ axie: axieId.toString() }, hre)
+    const axie = axieIds[i].toString()
+    await unlistAxie({ axie }, hre)
   }
 }

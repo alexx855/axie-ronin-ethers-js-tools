@@ -1,3 +1,6 @@
+import { ethers } from "ethers";
+export type SignerOrProvider = ethers.Signer | ethers.providers.Provider | undefined
+
 export async function apiRequest<T>(
   url: string,
   body: BodyInit | null = null,

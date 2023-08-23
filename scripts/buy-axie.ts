@@ -1,17 +1,6 @@
 
 import type { HardhatRuntimeEnvironment } from "hardhat/types"
-import { apiRequest } from "../lib/utils"
-import {
-  CONTRACT_MARKETPLACE_V2_ADDRESS,
-  CONTRACT_WETH_ADDRESS,
-  CONTRACT_MARKETPLACE_V2_ABI_JSON_PATH,
-  CONTRACT_WETH_ABI_JSON_PATH,
-  GRAPHQL_URL,
-  DEFAULT_GAS_LIMIT,
-  AvailableNetworks
-} from "../lib/constants"
-import * as fs from 'fs/promises'
-// import generateMartketplaceAccessToken from "./hardhat/generate-access-token"
+import buyMarketplaceOrder from "../lib/marketplace/buy-order"
 
 import * as dotenv from 'dotenv' // see https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
 dotenv.config()
@@ -19,11 +8,10 @@ dotenv.config()
 export default async function buyAxie(taskArgs: {
   axie: string
 }, hre: HardhatRuntimeEnvironment) {
-  if (hre.network.name != 'ronin' && hre.network.name != 'saigon') {
+  if (hre.network.name != 'ronin') {
     throw new Error('Network not supported')
   }
 
-  const network: AvailableNetworks = hre.network.name
   try {
     const axieId = parseInt(taskArgs.axie, 10)
     if (isNaN(axieId)) {
@@ -31,224 +19,13 @@ export default async function buyAxie(taskArgs: {
       return false
     }
 
-    console.log(`Getting order details for axie ${axieId}`)
-
-    interface Axie {
-      id: string
-      order: Order
-      __typename: string
-    }
-
-    interface Order {
-      id: number
-      maker: string
-      kind: string
-      assets: Asset[]
-      expiredAt: number
-      paymentToken: string
-      startedAt: number
-      basePrice: string
-      endedAt: number
-      endedPrice: string
-      expectedState: string
-      nonce: number
-      marketFeePercentage: number
-      signature: string
-      hash: string
-      duration: number
-      timeLeft: number
-      currentPrice: string
-      suggestedPrice: string
-      currentPriceUsd: string
-      __typename: string
-    }
-
-    interface Asset {
-      erc: string
-      address: string
-      id: string
-      quantity: string
-      orderId: number
-      __typename: string
-    }
-
-    interface IGetAxieDetail {
-      data?: {
-        axie: Axie
-      }
-      errors?: {
-        message: string
-      }
-    }
-
-    const query = `query GetAxieDetail($axieId: ID!) {
-      axie(axieId: $axieId) {
-        ...AxieDetail
-        __typename
-      }
-    }
-    fragment AxieDetail on Axie {
-      id
-      order {
-        ...OrderInfo
-        __typename
-      }
-    }
-
-    fragment OrderInfo on Order {
-      id
-      maker
-      kind
-      assets {
-        ...AssetInfo
-        __typename
-      }
-      expiredAt
-      paymentToken
-      startedAt
-      basePrice
-      endedAt
-      endedPrice
-      expectedState
-      nonce
-      marketFeePercentage
-      signature
-      hash
-      duration
-      timeLeft
-      currentPrice
-      suggestedPrice
-      currentPriceUsd
-      __typename
-    }
-    fragment AssetInfo on Asset {
-      erc
-      address
-      id
-      quantity
-      orderId
-      __typename
-    }`
-    const variables = {
-      axieId
-    }
-
-    // const accessToken = await generateMartketplaceAccessToken(hre)
-    // const GRAPHQL_URL = 'https://graphql-gateway.axieinfinity.com/graphql'
-    const headers = {
-      // authorization: `Bearer ${accessToken}`
-      'x-api-key': process.env.SKIMAVIS_DAPP_KEY!
-    }
-
-    const results = await apiRequest<IGetAxieDetail>(GRAPHQL_URL, JSON.stringify({ query, variables }), headers)
-    const order = results.data?.axie.order
-
-    if (!order) {
-      console.log('No order found')
-      return false
-    }
-
     // Get signer account
     const accounts = await hre.ethers.getSigners()
     const signer = accounts[0]
-    const address = signer.address.toLowerCase()
 
-    // check if have enough balance
-    const balance = await hre.ethers.provider.getBalance(address)
-    const currentPrice = hre.ethers.BigNumber.from(order.currentPrice)
-    if (currentPrice.gte(balance)) {
-      console.log('Not enough balance')
-      return false
-    }
-
-    console.log(`Buying axie ${axieId} for ${hre.ethers.utils.formatEther(order.currentPrice)} WETH`)
-
-    // approve WETH Contract to transfer WETH from the account to the marketplace contract
-    const wethABI = JSON.parse(await fs.readFile(CONTRACT_WETH_ABI_JSON_PATH, 'utf8'))
-    const wethContract = await new hre.ethers.Contract(
-      CONTRACT_WETH_ADDRESS[network],
-      wethABI,
-      signer
-    )
-
-    // check if have enough allowance
-    const allowance = await wethContract.allowance(address, CONTRACT_MARKETPLACE_V2_ADDRESS[network])
-    if (hre.ethers.BigNumber.isBigNumber(allowance) && allowance.eq(0)) {
-      console.log('Need approve the marketplace contract to transfer WETH, no allowance')
-      // same amount as the ronin wallet approval, got it from there
-      const amountToapproved = '115792089237316195423570985008687907853269984665640564039457584007913129639935'
-      const txApproveWETH = await wethContract.approve(CONTRACT_MARKETPLACE_V2_ADDRESS[network], amountToapproved, { gasLimit: DEFAULT_GAS_LIMIT })
-      console.log('txApproveWETH', txApproveWETH.hash)
-      const receipt = await txApproveWETH.wait()
-      console.log('Receipt:', receipt.transactionHash)
-    }
-
-    // check if have enough balance
-    const balanceWETH = await wethContract.balanceOf(address)
-    if (hre.ethers.BigNumber.isBigNumber(balanceWETH) && balanceWETH.lt(currentPrice)) {
-      const amountToTransfer = currentPrice.sub(balanceWETH)
-      console.log(`Not enough WETH balance to buy axie, you have ${hre.ethers.utils.formatEther(balanceWETH)} WETH, need ${hre.ethers.utils.formatEther(amountToTransfer)} WETH more`)
-      return false
-    }
-
-    const orderData = [
-      [
-        order.maker,
-        1, // market order kind
-        [[ // MarketAsset.Asset[]
-          1, // MarketAsset.TokenStandard
-          order.assets[0].address, // tokenAddress
-          order.assets[0].id, // axieId
-          +order.assets[0].quantity // quantity
-        ]],
-        order.expiredAt,
-        '0xc99a6a985ed2cac1ef41640596c5a5f9f4e19ef5', // paymentToken WETH
-        order.startedAt,
-        order.basePrice,
-        order.endedAt,
-        order.endedPrice,
-        0, // expectedState
-        order.nonce,
-        425 // Market fee percentage, 4.25%
-      ],
-      order.signature, // signature
-      order.currentPrice, // settlePrice
-      '0xa7d8ca624656922c633732fa2f327f504678d132', // referralAddr
-      0, // expectedState
-    ]
-
-    // get marketplace contract
-    const marketABI = JSON.parse(await fs.readFile(CONTRACT_MARKETPLACE_V2_ABI_JSON_PATH, 'utf8'))
-    const marketplaceContract = await new hre.ethers.Contract(
-      CONTRACT_MARKETPLACE_V2_ADDRESS[network],
-      marketABI,
-      signer
-    )
-
-    // settle order
-    const encodedOrderData = await marketplaceContract.interface.encodeFunctionData('settleOrder', orderData)
-
-    // estimate gas price
-    const gasPrice = await hre.ethers.provider.getGasPrice()
-    // const gasPrice = hre.ethers.utils.parseUnits(DEFAULT_GAS_LIMIT, 'wei')
-    console.log(`Gas price: ${gasPrice.toString()} wei`)
-    console.log(`Gas price: ${hre.ethers.utils.formatUnits(gasPrice, 'gwei')} gwei`)
-    const estimateGas = await marketplaceContract.estimateGas.interactWith('ORDER_EXCHANGE', encodedOrderData)
-    console.log(`Estimated ron gas limit: ${estimateGas.toString()}`)
-
-    // check if have enough ron balance
-    const gasCost = gasPrice.mul(estimateGas)
-    const balanceRON = await hre.ethers.provider.getBalance(address)
-    if (balanceRON.lt(gasCost)) {
-      console.log(`Not enough RON balance to buy axie, you have ${hre.ethers.utils.formatEther(balanceRON)} RON, need ${hre.ethers.utils.formatEther(gasCost)} RON more`)
-      return false
-    } else {
-      console.log(`Enough RON balance to buy axie, you need ${hre.ethers.utils.formatEther(gasCost)} RON`)
-    }
-
-    const txBuyAxie = await marketplaceContract.interactWith('ORDER_EXCHANGE', encodedOrderData)
-    // const txBuyAxie = await marketplaceContract.interactWith('ORDER_EXCHANGE', encodedOrderData, { gasLimit: DEFAULT_GAS_LIMIT })
-    const receipt = await txBuyAxie.wait()
+    // wait for the transaction to be mined
+    const skymavisApiKey = process.env.SKIMAVIS_DAPP_KEY!
+    const receipt = await buyMarketplaceOrder(axieId, signer, hre.ethers.provider, skymavisApiKey)
     console.log('Receipt:', receipt.transactionHash)
     return receipt.transactionHash as string
   } catch (error) {

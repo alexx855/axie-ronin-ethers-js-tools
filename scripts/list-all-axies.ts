@@ -1,8 +1,9 @@
 
 import listAxie from "./list-axie"
-import getAxieIds from "./get-axie"
+import { getAxieIdsFromAccount } from "../lib/axie"
 import { HardhatRuntimeEnvironment } from "hardhat/types"
 
+// TODO: multisig to save gas
 export default async function listAllAxies(taskArgs: {
   basePrice: string
   endedPrice?: string
@@ -15,14 +16,13 @@ export default async function listAllAxies(taskArgs: {
   const address = signer.address.toLowerCase()
   console.log(`Listing all axies of ${address.replace('0x', 'ronin:')}`)
 
-  // get axie ids
-  const axieIds = await getAxieIds(hre)
+  // get all axies ids from the account
+  const axieIds = await getAxieIdsFromAccount(address, signer)
 
   // list all axies, one by one
   for (let i = 0; i < axieIds.length; i++) {
     const axieId = axieIds[i]
 
-    // TODO: save in array, and list all at once Promise.all or multisig maybe to save gas
     await listAxie({ axie: axieId.toString(), ...taskArgs }, hre)
   }
 }
