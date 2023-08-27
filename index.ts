@@ -1,5 +1,6 @@
 import { getAxieIdsFromAccount } from "./lib/axie";
 import { generateAccessTokenMessage, exchangeToken } from "./lib/marketplace/access-token";
+import { getAxieContract, getUSDCContract, getWETHContract } from "./lib/contracts"
 import approveMarketplaceContract from "./lib/marketplace/approve";
 import cancelMarketplaceOrder from "./lib/marketplace/cancel-order";
 import createActivity from "./lib/marketplace/create-activity";
@@ -17,4 +18,7 @@ export {
   buyMarketplaceOrder,
   createActivity,
   batchTransferAxies,
+  getAxieContract,
+  getUSDCContract,
+  getWETHContract,
 };

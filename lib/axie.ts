@@ -1,7 +1,7 @@
 import { getAxieContract } from "./contracts";
 import { SignerOrProvider } from "./utils";
 
-export async function getAxieIdsFromAccount(address: string, signerOrProvider: SignerOrProvider) {
+export async function getAxieIdsFromAccount(address: string, signerOrProvider: SignerOrProvider): Promise<number[]> {
   // get axie contract
   const axieContract = await getAxieContract(signerOrProvider)
 

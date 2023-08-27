@@ -1,17 +1,17 @@
+import { ethers } from "ethers";
 import { getAxieContract, getBatchTransferContract } from "./contracts";
-import { SignerOrProvider } from "./utils";
 
 export default async function batchTransferAxies(
   addressFrom: string,
   addressTo: string,
   axieIds: string[],
-  signerOrProvider?: SignerOrProvider
+  Signer: ethers.Signer
 ) {
   console.log(`Transferring ${axieIds.length} axies from ${addressFrom} to ${addressTo}`)
 
   // check if the batch contract is approved to transfer the axies from addressFrom
-  const batchTransferContract = await getBatchTransferContract(signerOrProvider)
-  const axieContract = await getAxieContract(signerOrProvider)
+  const batchTransferContract = await getBatchTransferContract(Signer)
+  const axieContract = await getAxieContract(Signer)
   const isApproved = await axieContract.isApprovedForAll(addressFrom, batchTransferContract.address)
 
   // requirements: msg.sender has to call setApprovalForAll on _tokenContract to authorize this contract.
