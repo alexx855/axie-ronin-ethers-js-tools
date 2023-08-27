@@ -133,7 +133,7 @@ const batchTransferAllAxies = async (addressTo:string) => {
     return axieId.toString()
   })
   // wait for tx to be mined and get receipt
-  const receipt = await batchTransferAxies(address, axieIds, axies, provider)
+  const receipt = await batchTransferAxies(addressFrom, addressTo, axies, provider)
 }
 
 ```
