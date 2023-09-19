@@ -7,7 +7,7 @@ This repository provides a set of utilities and examples to interact with the Ro
 Install the dependencies
 
 ```shell
-npm install axie-ronin-devkit ethers@5.7.0 dotenv
+npm install axie-ronin-ethers-js-tools ethers@5.7.0 dotenv
 ```
 
 Generate a wallet and provider, which will be used to interact with the Ronin network using ethers.js
@@ -17,18 +17,19 @@ import { ethers } from 'ethers';
 import * as dotenv from 'dotenv'
 dotenv.config()
 
-// see https://docs.skymavis.com/api/rpc
+// Connection to the Ronin network using the RPC endpoint
 const connection = {
   url: 'https://api-gateway.skymavis.com/rpc',
   headers: {
       'x-api-key': 'xxxxx' // get from https://developers.skymavis.com/console/applications/
   }
 }
+
+// See https://docs.skymavis.com/api/rpc
 const provider = new ethers.providers.JsonRpcProvider(connection);
 
 // Import the wallet private key from the environment
-const wallet = new ethers.Wallet(process.env.PRIVATE_KEY!)
-await wallet.connect(provider)
+const wallet = new ethers.Wallet(process.env.PRIVATE_KEY!, provider) 
 ```
 
 ### Generate a marketplace access token, which is required to interact with the marketplace
@@ -104,22 +105,22 @@ const cancelAxieSale = async (axieId: number) => {
 
 ### Buy an axie
 
+Full example here [examples/buy](https://github.com/alexx855/axie-ronin-ethers-js-tools/tree/main/examples/buy)
+
 ```typescript
 import { buyMarketplaceOrder } from "axie-ronin-ethers-js-tools";
 
 const buyAxieFromMarketplace = async (axieId: number) => {
-  // Get address from wallet
-  const address = await wallet.getAddress()
   // Wait for the transaction to be mined
   const skymavisApyKey = 'xxxxx' // get from https://developers.skymavis.com/console/applications/
-  const receipt = await buyMarketplaceOrder(axieId, address, provider, skymavisApyKey)
+  const receipt = await buyMarketplaceOrder(axieId, wallet, provider, skymavisApyKey)
+  console.log(receipt.transactionHash)
 }
 ```
 
 ### Batch transfer all axies
 
 This will transfer all axies ids from the wallet to the specified address, it uses the ERC721 Batch Transfer contract: <https://app.roninchain.com/address/0x2368dfed532842db89b470fde9fd584d48d4f644>
-
 
 ```typescript
 import { getAxieIdsFromAccount, batchTransferAxies } from "axie-ronin-ethers-js-tools";
