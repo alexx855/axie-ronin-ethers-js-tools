@@ -41,8 +41,8 @@ async function buyAxie() {
   const args = process.argv.slice(2)
   const axieId = parseInt(args[0])
 
-  const skymavisApyKey = process.env.SKIMAVIS_DAPP_KEY
-  const receipt = await buyMarketplaceOrder(axieId, wallet, provider, skymavisApyKey)
+  const skyMavisApiKey = process.env.SKIMAVIS_DAPP_KEY
+  const receipt = await buyMarketplaceOrder(axieId, wallet, provider, skyMavisApiKey)
   console.log(receipt.transactionHash)
 }
 

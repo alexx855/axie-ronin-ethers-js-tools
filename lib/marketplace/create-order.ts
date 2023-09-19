@@ -33,7 +33,7 @@ export default async function createMarketplaceOrder(
   orderData: ICreateOrderData,
   accessToken: string,
   provider: ethers.providers.JsonRpcProvider,
-  skymavisApyKey: string
+  skyMavisApiKey: string
 ) {
 
   const {
@@ -233,7 +233,7 @@ export default async function createMarketplaceOrder(
 
   const headers = {
     'authorization': `Bearer ${accessToken}`,
-    'x-api-key': skymavisApyKey
+    'x-api-key': skyMavisApiKey
   }
 
   const result = await apiRequest<ICreateOrderResult>(GRAPHQL_URL, JSON.stringify({ query, variables }), headers)

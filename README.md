@@ -85,8 +85,8 @@ const createAxieSale = async () => {
     expiredAt,
   }
   // Wait for markeplace api result
-  const skymavisApyKey = 'xxxxx' // get from https://developers.skymavis.com/console/applications/
-  const result = await createMarketplaceOrder(orderData, accessToken, provider, skymavisApyKey)
+  const skyMavisApiKey = 'xxxxx' // get from https://developers.skymavis.com/console/applications/
+  const result = await createMarketplaceOrder(orderData, accessToken, provider, skyMavisApiKey)
 }
 ```
 
@@ -97,8 +97,8 @@ import { cancelMarketplaceOrder } from "axie-ronin-ethers-js-tools";
 
 const cancelAxieSale = async (axieId: number) => {
     // Wait for the transaction to be mined
-    const skymavisApyKey = 'xxxxx' // get from https://developers.skymavis.com/console/applications/
-    const receipt = await cancelMarketplaceOrder(axieId, wallet, skymavisApyKey)
+    const skyMavisApiKey = 'xxxxx' // get from https://developers.skymavis.com/console/applications/
+    const receipt = await cancelMarketplaceOrder(axieId, wallet, skyMavisApiKey)
 }
 
 ```
@@ -112,8 +112,8 @@ import { buyMarketplaceOrder } from "axie-ronin-ethers-js-tools";
 
 const buyAxieFromMarketplace = async (axieId: number) => {
   // Wait for the transaction to be mined
-  const skymavisApyKey = 'xxxxx' // get from https://developers.skymavis.com/console/applications/
-  const receipt = await buyMarketplaceOrder(axieId, wallet, provider, skymavisApyKey)
+  const skyMavisApiKey = 'xxxxx' // get from https://developers.skymavis.com/console/applications/
+  const receipt = await buyMarketplaceOrder(axieId, wallet, provider, skyMavisApiKey)
   console.log(receipt.transactionHash)
 }
 ```
