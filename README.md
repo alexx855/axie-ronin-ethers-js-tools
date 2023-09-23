@@ -1,4 +1,4 @@
-# Axie ronin devkit
+# Axie Infinity ether js tools
 
 This repository provides a set of utilities and examples to interact with the Ronin network and the Axie Infinity marketplace.
 
@@ -118,9 +118,10 @@ const buyAxieFromMarketplace = async (axieId: number) => {
 }
 ```
 
-### Batch transfer all axies
+### Batch transfer all axies in the account
 
-This will transfer all axies ids from the wallet to the specified address, it uses the ERC721 Batch Transfer contract: <https://app.roninchain.com/address/0x2368dfed532842db89b470fde9fd584d48d4f644>
+This will transfer all axies from the wallet to the specified address, it uses the ERC721 Batch Transfer contract: <https://app.roninchain.com/address/0x2368dfed532842db89b470fde9fd584d48d4f644>
+Full example here [examples/batch-transfer-js](https://github.com/alexx855/axie-ronin-ethers-js-tools/tree/main/examples/batch-transfer-js)
 
 ```typescript
 import { getAxieIdsFromAccount, batchTransferAxies } from "axie-ronin-ethers-js-tools";
