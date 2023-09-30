@@ -1,18 +1,21 @@
+import { ethers } from "ethers";
 import { getAxieContract } from "./contracts";
-import { SignerOrProvider } from "./utils";
 
-export async function getAxieIdsFromAccount(address: string, signerOrProvider: SignerOrProvider): Promise<number[]> {
+export async function getAxieIdsFromAccount(address: string, provider: ethers.providers.JsonRpcProvider) {
   // get axie contract
-  const axieContract = await getAxieContract(signerOrProvider)
+  const axieContract = await getAxieContract(provider)
 
   // get axies balance for the address
   const axiesBalance = await axieContract.balanceOf(address)
 
   // get axie ids
-  let axieIds = []
+  let axieIds: number[] = []
   for (let i = 0; i < axiesBalance; i++) {
-    const axieId: number = await axieContract.tokenOfOwnerByIndex(address, i)
-    axieIds.push(axieId)
+    const axieId = await axieContract.tokenOfOwnerByIndex(address, i)
+    // convert to number
+    if (ethers.BigNumber.isBigNumber(axieId)) {
+      axieIds.push(axieId.toNumber())
+    }
   }
 
   return axieIds

@@ -32,7 +32,7 @@ export interface ICreateOrderResult {
 export default async function createMarketplaceOrder(
   orderData: ICreateOrderData,
   accessToken: string,
-  provider: ethers.providers.JsonRpcProvider,
+  signer: ethers.Wallet,
   skyMavisApiKey: string
 ) {
 
@@ -46,126 +46,117 @@ export default async function createMarketplaceOrder(
     expiredAt,
   } = orderData
 
-  const message = {
-    types: {
-      Asset: [
-        {
-          name: 'erc',
-          type: 'uint8'
-        },
-        {
-          name: 'addr',
-          type: 'address'
-        },
-        {
-          name: 'id',
-          type: 'uint256'
-        },
-        {
-          name: 'quantity',
-          type: 'uint256'
-        }
-      ],
-      Order: [
-        {
-          name: 'maker',
-          type: 'address'
-        },
-        {
-          name: 'kind',
-          type: 'uint8'
-        },
-        {
-          name: 'assets',
-          type: 'Asset[]'
-        },
-        {
-          name: 'expiredAt',
-          type: 'uint256'
-        },
-        {
-          name: 'paymentToken',
-          type: 'address'
-        },
-        {
-          name: 'startedAt',
-          type: 'uint256'
-        },
-        {
-          name: 'basePrice',
-          type: 'uint256'
-        },
-        {
-          name: 'endedAt',
-          type: 'uint256'
-        },
-        {
-          name: 'endedPrice',
-          type: 'uint256'
-        },
-        {
-          name: 'expectedState',
-          type: 'uint256'
-        },
-        {
-          name: 'nonce',
-          type: 'uint256'
-        },
-        {
-          name: 'marketFeePercentage',
-          type: 'uint256'
-        }
-      ],
-      EIP712Domain: [
-        {
-          name: 'name',
-          type: 'string'
-        },
-        {
-          name: 'version',
-          type: 'string'
-        },
-        {
-          name: 'chainId',
-          type: 'uint256'
-        },
-        {
-          name: 'verifyingContract',
-          type: 'address'
-        }
-      ]
-    },
-    domain: {
-      name: 'MarketGateway',
-      version: '1',
-      chainId: '2020',
-      verifyingContract: CONTRACT_MARKETPLACE_V2_ADDRESS['ronin']
-    },
-    primaryType: 'Order',
-    message: {
-      maker: address,
-      kind: '1',
-      assets: [
-        {
-          erc: '1',
-          addr: CONTRACT_AXIE_ADDRESS['ronin'],
-          id: axieId,
-          quantity: '0'
-        }
-      ],
-      expiredAt,
-      paymentToken: CONTRACT_WETH_ADDRESS['ronin'],
-      startedAt,
-      basePrice,
-      endedAt,
-      endedPrice,
-      expectedState: '0',
-      nonce: '0',
-      marketFeePercentage: '425'
-    }
-  }
-  // sign the trasaction, we need to call eth_signTypedData_v4 EPI721
-  const signature = await provider.send('eth_signTypedData_v4', [address, JSON.stringify(message)])
+  const types = {
+    Asset: [
+      {
+        name: 'erc',
+        type: 'uint8'
+      },
+      {
+        name: 'addr',
+        type: 'address'
+      },
+      {
+        name: 'id',
+        type: 'uint256'
+      },
+      {
+        name: 'quantity',
+        type: 'uint256'
+      }
+    ],
+    Order: [
+      {
+        name: 'maker',
+        type: 'address'
+      },
+      {
+        name: 'kind',
+        type: 'uint8'
+      },
+      {
+        name: 'assets',
+        type: 'Asset[]'
+      },
+      {
+        name: 'expiredAt',
+        type: 'uint256'
+      },
+      {
+        name: 'paymentToken',
+        type: 'address'
+      },
+      {
+        name: 'startedAt',
+        type: 'uint256'
+      },
+      {
+        name: 'basePrice',
+        type: 'uint256'
+      },
+      {
+        name: 'endedAt',
+        type: 'uint256'
+      },
+      {
+        name: 'endedPrice',
+        type: 'uint256'
+      },
+      {
+        name: 'expectedState',
+        type: 'uint256'
+      },
+      {
+        name: 'nonce',
+        type: 'uint256'
+      },
+      {
+        name: 'marketFeePercentage',
+        type: 'uint256'
+      }
+    ]
+  };
+
+  const domain = {
+    name: 'MarketGateway',
+    version: '1',
+    chainId: '2020',
+    verifyingContract: CONTRACT_MARKETPLACE_V2_ADDRESS['ronin']
+  };
+
+  const order = {
+    maker: address,
+    kind: '1',
+    assets: [
+      {
+        erc: '1',
+        addr: CONTRACT_AXIE_ADDRESS['ronin'],
+        id: axieId,
+        quantity: '0' // ??? not sure why this is 0, maybbe its for items
+      }
+    ],
+    expiredAt,
+    paymentToken: CONTRACT_WETH_ADDRESS['ronin'],
+    startedAt,
+    basePrice,
+    endedAt,
+    endedPrice,
+    expectedState: '0',
+    nonce: '0', // ?? use nonce from the wallet
+    marketFeePercentage: '425'
+  };
+
+  const signature = await signer._signTypedData(domain, types, order);
+
+  //   // fallback to send eth_signTypedData_v4 from the provider
+  //   signature = await signer.provider.send('eth_signTypedData_v4', [address, JSON.stringify({
+  //     types,
+  //     domain,
+  //     primaryType: 'Order',
+  //     message: order
+  //   })])
+  // }
+
 
   const query = `
         mutation CreateOrder($order: InputOrder!, $signature: String!) {
@@ -228,8 +219,6 @@ export default async function createMarketplaceOrder(
     },
     signature
   }
-
-
 
   const headers = {
     'authorization': `Bearer ${accessToken}`,

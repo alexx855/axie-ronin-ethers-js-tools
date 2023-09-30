@@ -1,10 +1,10 @@
 {
   "name": "axie-ronin-ethers-js-tools",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "A set of functions that make it easier for developers to interact with their Axies on the Ronin network and the maketplace.",
   "scripts": {
     "build": "tsc",
-    "test": "npx hardhat test",
+    "prepublishOnly": "npm run build",
     "account": "npx hardhat account",
     "access-token": "npx hardhat generate-access-token"
   },
@@ -50,8 +50,8 @@
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^2.0.2",
     "@types/node": "^18.15.11",
-    "hardhat": "^2.14.0",
-    "dotenv": "^16.0.3"
+    "dotenv": "^16.3.1",
+    "hardhat": "^2.14.0"
   },
   "dependencies": {
     "ethers": "^5.7.0",

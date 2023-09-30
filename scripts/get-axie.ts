@@ -9,7 +9,7 @@ export default async function getAxieIds(hre: HardhatRuntimeEnvironment) {
     const signer = accounts[0]
     const address = signer.address.toLowerCase()
 
-    const axieIds = getAxieIdsFromAccount(address, signer)
+    const axieIds = getAxieIdsFromAccount(address, hre.ethers.provider)
     return axieIds
   } catch (error) {
     console.error(error)

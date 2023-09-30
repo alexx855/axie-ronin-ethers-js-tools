@@ -1,10 +1,10 @@
+import { ethers } from "ethers";
 import { CONTRACT_MARKETPLACE_V2_ADDRESS } from "../constants";
 import { getAxieContract } from "../contracts";
-import { SignerOrProvider } from "../utils";
 
 // check and approve the axie contract to transfer axies from address to the marketplace contract
-export default async function approveMarketplaceContract(address: string, signerOrProvider: SignerOrProvider) {
-  const axieContract = await getAxieContract(signerOrProvider)
+export default async function approveMarketplaceContract(address: string, signer: ethers.Signer) {
+  const axieContract = await getAxieContract(signer)
   let isApproved = await axieContract.isApprovedForAll(address, CONTRACT_MARKETPLACE_V2_ADDRESS['ronin'])
 
   if (!isApproved) {
@@ -15,6 +15,8 @@ export default async function approveMarketplaceContract(address: string, signer
     console.log('Receipt:', receipt.transactionHash)
     // check if marketplace contract is approved for the axie contract
     isApproved = await axieContract.isApprovedForAll(address, CONTRACT_MARKETPLACE_V2_ADDRESS['ronin'])
+  } else {
+    console.log('Marketplace contract is already approved')
   }
 
   return isApproved

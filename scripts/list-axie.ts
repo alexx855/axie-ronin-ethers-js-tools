@@ -87,8 +87,9 @@ export default async function listAxie(taskArgs: {
       endedAt,
       expiredAt,
     }
+
     const skymavisApiKey = process.env.SKIMAVIS_DAPP_KEY!
-    const result = await createMarketplaceOrder(orderData, accessToken, hre.ethers.provider, skymavisApiKey)
+    const result = await createMarketplaceOrder(orderData, accessToken, signer, skymavisApiKey)
 
     if (result === null || result.data?.createOrder.hash === undefined || result.errors !== undefined) {
       console.log('Error creating order', result)

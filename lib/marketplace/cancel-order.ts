@@ -10,7 +10,7 @@ import { getMarketplaceContract } from "../contracts";
 export default async function cancelMarketplaceOrder(
   axieId: string,
   signer: ethers.Signer,
-  skymavisApiKey: string
+  skymavisApiKey: string,
 ) {
 
   // query the marketplace for the axie order
@@ -104,7 +104,7 @@ export default async function cancelMarketplaceOrder(
 
   const result = await apiRequest<IMarketplaceAxieOrderResult>(GRAPHQL_URL, JSON.stringify({ query, variables }), headers)
   if (result === null || result.data === undefined || result.data.axie.order == null) {
-    console.log(`Axie ${axieId} not listed`)
+    console.log(`Axie ${axieId} is not for sale`)
     return false
   }
 

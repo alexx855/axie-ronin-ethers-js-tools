@@ -17,20 +17,20 @@ export default async function account(taskArgs: {}, hre: HardhatRuntimeEnvironme
     console.log('RON:', balanceInEther)
 
     // get WETH balance
-    const wethContract = await getWETHContract(signer)
+    const wethContract = await getWETHContract(hre.ethers.provider)
     const wethBalance = await wethContract.balanceOf(address)
     const wethBalanceInEther = hre.ethers.utils.formatEther(wethBalance)
     console.log('WETH:', wethBalanceInEther)
 
     // get axie contract
-    const axieContract = await getAxieContract(signer)
+    const axieContract = await getAxieContract(hre.ethers.provider)
 
     // get axies balance for the address
     const axiesBalance = await axieContract.balanceOf(address)
     console.log('Axies:', hre.ethers.BigNumber.from(axiesBalance).toString())
 
     // get USDC balance
-    const usdcContract = await getUSDCContract(signer)
+    const usdcContract = await getUSDCContract(hre.ethers.provider)
     const usdcBalance = await usdcContract.balanceOf(address)
     const usdcBalanceFormated = hre.ethers.utils.formatUnits(usdcBalance, 6)
     console.log('USDC balance: ', usdcBalanceFormated)

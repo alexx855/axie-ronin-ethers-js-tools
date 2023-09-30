@@ -129,12 +129,12 @@ export default async function buyMarketplaceOrder(
     console.log(`Buying axie ${axieId} for ${ethers.utils.formatEther(order.currentPrice)} WETH`)
 
     // get marketplace contract
-    const marketplaceContract = await getMarketplaceContract(signer)
+    const marketplaceContract = await getMarketplaceContract(provider)
 
     const address = await signer.getAddress()
 
     // check if the marketplace contract has enough WETH allowance
-    const wethContract = await getWETHContract(signer)
+    const wethContract = await getWETHContract(provider)
     const allowance = await wethContract.allowance(address, marketplaceContract.address)
     if (ethers.BigNumber.isBigNumber(allowance) && allowance.eq(0)) {
       console.log('Need approve the marketplace contract to transfer WETH, no allowance')

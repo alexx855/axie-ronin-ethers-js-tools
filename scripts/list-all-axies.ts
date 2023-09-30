@@ -17,7 +17,7 @@ export default async function listAllAxies(taskArgs: {
   console.log(`Listing all axies of ${address.replace('0x', 'ronin:')}`)
 
   // get all axies ids from the account
-  const axieIds = await getAxieIdsFromAccount(address, signer)
+  const axieIds = await getAxieIdsFromAccount(address, hre.ethers.provider)
 
   // list all axies, one by one
   for (let i = 0; i < axieIds.length; i++) {

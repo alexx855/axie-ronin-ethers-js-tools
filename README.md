@@ -29,7 +29,7 @@ const connection = {
 const provider = new ethers.providers.JsonRpcProvider(connection);
 
 // Import the wallet private key from the environment
-const wallet = new ethers.Wallet(process.env.PRIVATE_KEY!, provider) 
+const wallet = new ethers.Wallet(process.env.PRIVATE_KEY, provider) 
 ```
 
 ### Generate a marketplace access token, which is required to interact with the marketplace
@@ -37,7 +37,7 @@ const wallet = new ethers.Wallet(process.env.PRIVATE_KEY!, provider)
 ```typescript
 import { generateAccessTokenMessage, exchangeToken } from 'axie-ronin-ethers-js-tools';
 
-const getMarketplaceAccessToken = async (): Promise<string> => {
+const getMarketplaceAccessToken = async (wallet: ethers.Wallet): Promise<string> => {
   // Get address from signer
   const address = await wallet.getAddress()
   // Generate message to sign
@@ -60,14 +60,16 @@ const getMarketplaceAccessToken = async (): Promise<string> => {
 const createAxieSale = async () => {
   // 1 ETH in wei
   const basePrice = ethers.utils.parseUnits('1', 'ether').toString()
-  // 0.5 ETH in wei
-  const endedPrice = ethers.utils.parseUnits('0.5', 'ether').toString()
+  // This is just for auctions
+  const endedPrice = '0'
   // ID of the axie to list for sale on the marketplace
-  const axieId = 9604431
+  const axieId = '9604431'
   // Generate marketplace access token (see above)
-  const accessToken = await getMarketplaceAccessToken()
+  const accessToken = await getMarketplaceAccessToken(wallet)
+  // Get address from wallet
+  const walletAddress = await wallet.getAddress()
   // Approve the axie contract to transfer axies from address to the marketplace contract
-  const isApproved = await approveMarketplaceContract(address, wallet)
+  const isApproved = await approveMarketplaceContract(walletAddress, provider)
   // Get current block timestamp
   const currentBlock = await provider.getBlock('latest')
   const startedAt = currentBlock.timestamp
@@ -86,7 +88,7 @@ const createAxieSale = async () => {
   }
   // Wait for markeplace api result
   const skyMavisApiKey = 'xxxxx' // get from https://developers.skymavis.com/console/applications/
-  const result = await createMarketplaceOrder(orderData, accessToken, provider, skyMavisApiKey)
+  const result = await createMarketplaceOrder(orderData, accessToken, wallet, skyMavisApiKey)
 }
 ```
 
@@ -128,21 +130,22 @@ import { getAxieIdsFromAccount, batchTransferAxies } from "axie-ronin-ethers-js-
 
 const batchTransferAllAxies = async (addressTo:string) => {
   // Get address from wallet
-  const address = await wallet.getAddress()
+  const address: string = await wallet.getAddress()
   // get all axies ids from the account
-  const axieIds = await getAxieIdsFromAccount(address, provider)
+  const axieIds: number[] = await getAxieIdsFromAccount(address, provider)
+
   const axies: string[] = axieIds.map((axieId) => {
     return axieId.toString()
   })
   // wait for tx to be mined and get receipt
-  const receipt = await batchTransferAxies(addressFrom, addressTo, axies, wallet)
+  const receipt = await batchTransferAxies(wallet, addressTo, axies)
 }
 
 ```
 
-#### How to dev
+#### How to dev/test locally
 
-Copy the `.env.example` file to `.env` and fill in your account private key (you can get this from the Ronin wallet). Please not share your private key with anyone.
+Clone the repository, copy `.env.example` to `.env` and fill in your account private key (you can get this from the Ronin wallet). Please do not share your private key with anyone or commit it to a public repository.
 
 ```shell
 npm install
@@ -158,8 +161,8 @@ npx hardhat buy --axie $AXIE_ID
 npx hardhat transfer-axie --axie $AXIE_ID --address $ADDRESS
 npx hardhat transfer-all-axies --address $ADDRESS
 npx hardhat transfer-all-axies --address $ADDRESS --axies "$AXIE_ID,$AXIE_ID"
-```
+
 
 #### Contributing
 
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+Pull requests and issues are welcome :)

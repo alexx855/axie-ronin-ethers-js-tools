@@ -25,14 +25,14 @@ export default async function transferAllAxies(taskArgs: {
     // if no axies provided, get all axies from the account
     if (!axies || axies.length == 0) {
       // get all axies ids from the account
-      const axieIds = await getAxieIdsFromAccount(address, signer)
+      const axieIds = await getAxieIdsFromAccount(address, hre.ethers.provider)
       for (let i = 0; i < axieIds.length; i++) {
         axies.push(axieIds[i].toString())
       }
     }
 
     // wait for tx to be mined and get receipt
-    const receipt = await batchTransferAxies(address, taskArgs.address.replace('ronin:', '0x').toLowerCase(), axies, signer)
+    const receipt = await batchTransferAxies(signer, taskArgs.address.replace('ronin:', '0x').toLowerCase(), axies)
 
     console.log('Receipt:', receipt.transactionHash)
     return receipt.transactionHash

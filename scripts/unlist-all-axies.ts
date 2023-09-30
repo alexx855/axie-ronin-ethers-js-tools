@@ -11,7 +11,7 @@ export default async function unlistAllAxies(taskArgs: {}, hre: HardhatRuntimeEn
   console.log(`Unlisting all axies of ${address.replace('0x', 'ronin:')}`)
 
   // get axie ids from the account
-  const axieIds = await getAxieIdsFromAccount(address, signer)
+  const axieIds = await getAxieIdsFromAccount(address, hre.ethers.provider)
   for (let i = 0; i < axieIds.length; i++) {
     const axie = axieIds[i].toString()
     await unlistAxie({ axie }, hre)
