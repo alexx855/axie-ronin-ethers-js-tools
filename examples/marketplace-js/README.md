@@ -10,8 +10,6 @@ npm install
 
 ### Run the script
 
-This will transfer all axies from the wallet to the specified address, it uses the ERC721 Batch Transfer contract: <https://app.roninchain.com/address/0x2368dfed532842db89b470fde9fd584d48d4f644>
-
 ```bash
 node sale.js $AXIE_ID // this will create a sale for the $AXIE_ID  for 0.1 ETH
 node auction.js $AXIE_ID // this will create a auction for the $AXIE_ID  for 0.1 ETH to 0.5 ETH with a duration of 24 hours
