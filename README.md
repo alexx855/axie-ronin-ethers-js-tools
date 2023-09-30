@@ -161,7 +161,7 @@ npx hardhat buy --axie $AXIE_ID
 npx hardhat transfer-axie --axie $AXIE_ID --address $ADDRESS
 npx hardhat transfer-all-axies --address $ADDRESS
 npx hardhat transfer-all-axies --address $ADDRESS --axies "$AXIE_ID,$AXIE_ID"
-
+```
 
 #### Contributing
 
