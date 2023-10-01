@@ -17,7 +17,7 @@ export default async function transferAllAxies(taskArgs: {
     const signer = accounts[0]
     const address = signer.address.toLowerCase()
 
-    let axies = taskArgs.axies ? taskArgs.axies.split(',').map((axie: string) => {
+    let axies: Array<string | number> = taskArgs.axies ? taskArgs.axies.split(',').map((axie: string) => {
       // remove whitespaces and # and convert to int
       return axie.replace(/\s/g, '').replace('#', '')
     }) : []
@@ -26,9 +26,7 @@ export default async function transferAllAxies(taskArgs: {
     if (!axies || axies.length == 0) {
       // get all axies ids from the account
       const axieIds = await getAxieIdsFromAccount(address, hre.ethers.provider)
-      for (let i = 0; i < axieIds.length; i++) {
-        axies.push(axieIds[i].toString())
-      }
+      axies = axieIds
     }
 
     // wait for tx to be mined and get receipt

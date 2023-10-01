@@ -46,19 +46,13 @@ async function batchTransfer(){
   // Get all axies ids from the account
   const axieIds = await getAxieIdsFromAccount(addressFrom, provider)
 
-  // Convert axieIds to string
-  const axies = axieIds.map((axieId) => {
-    return axieId.toString()
-  })
-  console.log(`Axies: ${axies.join(', ')}`)
-
-  if (axies.length === 0) {
+  if (axieIds.length === 0) {
     console.log('No axies to transfer')
     return
   }
 
   // Wait for tx to be mined and get the transaction hash
-  const receipt = await batchTransferAxies(wallet, addressTo, axies)
+  const receipt = await batchTransferAxies(wallet, addressTo, axieIds)
   if (!receipt || !receipt.transactionHash) {
     throw new Error('Something went wrong, please try again')
   }

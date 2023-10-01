@@ -4,10 +4,15 @@ import { getAxieContract, getBatchTransferContract } from "./contracts";
 export default async function batchTransferAxies(
   signer: ethers.Signer,
   addressTo: string,
-  axieIds: string[]
+  axieIds: Array<string | number>
 ) {
   const addressFrom = await signer.getAddress()
   console.log(`Transferring ${axieIds.length} axies from ${addressFrom} to ${addressTo}`)
+
+  // convert axieIds to an array of strings
+  const axies: string[] = axieIds.map((axieId) => {
+    return typeof axieId === 'string' ? axieId : axieId.toString()
+  })
 
   // check if the batch contract is approved to transfer the axies from addressFrom
   const writeBatchTransferContract = await getBatchTransferContract(signer)
@@ -25,8 +30,8 @@ export default async function batchTransferAxies(
     console.log('Batch Transfer contract already approved')
   }
 
-  // batch Transfer
-  const tx = await writeBatchTransferContract.functions['safeBatchTransfer(address,uint256[],address)'](writeAxieContract.address, axieIds, addressTo.replace('ronin:', '0x').toLowerCase())
+  // batch Transfer, call the function this way since it's overloaded
+  const tx = await writeBatchTransferContract.functions['safeBatchTransfer(address,uint256[],address)'](writeAxieContract.address, axies, addressTo.replace('ronin:', '0x').toLowerCase())
   // wait for tx to be mined and get receipt  
   const receipt = await tx.wait()
   return receipt
