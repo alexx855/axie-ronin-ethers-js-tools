@@ -67,11 +67,11 @@ async function sale() {
     throw new Error(`Axie ${axieId} is not owned by ${addressFrom}`)
   }
 
-  // Check if axie contract is approved in the marketplace contract, if not, approve the axie contract to transfer axies from address to the marketplace contract
+  // Check if axie contract is approved in the marketplace contract, if not, approve the marketplace contract to transfer axies 
   const isApproved = await approveMarketplaceContract(addressFrom, wallet)
   if (!isApproved) {
     console.log(`Axie Contract is not approved in the Marketplace Contract for ${addressFrom}`)
-    return false
+    throw new Error('Marketplace contract is not approved to transfer axies')
   }
 
   // get current block timestamp
@@ -85,7 +85,7 @@ async function sale() {
   const expiredAt = startedAt + 15634800
   const orderData = {
     address: addressFrom,
-    axieId: axieId.toString(), // axieId must be a string here
+    axieId: axieId.toString(), // the axieId to sell, must be a string here
     basePrice,
     endedPrice,
     startedAt,
