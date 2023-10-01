@@ -56,6 +56,8 @@ const getMarketplaceAccessToken = async (wallet: ethers.Wallet): Promise<string>
 
 ### List an axie for sale on the marketplace
 
+Full example here [examples/marketplace-js](https://github.com/alexx855/axie-ronin-ethers-js-tools/tree/main/examples/marketplace-js/sale.js)
+
 ```typescript
 const createAxieSale = async () => {
   // 1 ETH in wei
@@ -67,9 +69,9 @@ const createAxieSale = async () => {
   // Generate marketplace access token (see above)
   const accessToken = await getMarketplaceAccessToken(wallet)
   // Get address from wallet
-  const walletAddress = await wallet.getAddress()
+  const addressFrom = await wallet.getAddress()
   // Approve the axie contract to transfer axies from address to the marketplace contract
-  const isApproved = await approveMarketplaceContract(walletAddress, provider)
+  const isApproved = await approveMarketplaceContract(addressFrom, wallet)
   // Get current block timestamp
   const currentBlock = await provider.getBlock('latest')
   const startedAt = currentBlock.timestamp
@@ -93,6 +95,8 @@ const createAxieSale = async () => {
 ```
 
 ### Unlist an axie from the marketplace
+
+Full example here [examples/marketplace-js](https://github.com/alexx855/axie-ronin-ethers-js-tools/tree/main/examples/marketplace-js/cancel.js)
 
 ```typescript
 import { cancelMarketplaceOrder } from "axie-ronin-ethers-js-tools";
@@ -122,8 +126,9 @@ const buyAxieFromMarketplace = async (axieId: number) => {
 
 ### Batch transfer all axies in the account
 
-This will transfer all axies from the wallet to the specified address, it uses the ERC721 Batch Transfer contract: <https://app.roninchain.com/address/0x2368dfed532842db89b470fde9fd584d48d4f644>
 Full example here [examples/batch-transfer-js](https://github.com/alexx855/axie-ronin-ethers-js-tools/tree/main/examples/batch-transfer-js)
+
+This will transfer all axies from the wallet to the specified address, it uses the ERC721 Batch Transfer contract: <https://app.roninchain.com/address/0x2368dfed532842db89b470fde9fd584d48d4f644>
 
 ```typescript
 import { getAxieIdsFromAccount, batchTransferAxies } from "axie-ronin-ethers-js-tools";
@@ -133,10 +138,6 @@ const batchTransferAllAxies = async (addressTo:string) => {
   const address: string = await wallet.getAddress()
   // get all axies ids from the account
   const axieIds: number[] = await getAxieIdsFromAccount(address, provider)
-
-  const axies: string[] = axieIds.map((axieId) => {
-    return axieId.toString()
-  })
   // wait for tx to be mined and get receipt
   const receipt = await batchTransferAxies(wallet, addressTo, axies)
 }
