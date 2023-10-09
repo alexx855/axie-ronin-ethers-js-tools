@@ -17,7 +17,7 @@ import {
 
 export async function getAxieContract(signerOrProvider?: SignerOrProvider, network: AvailableNetworks = 'ronin') {
   const CONTRACT_AXIE_ABI = JSON.parse(await fs.readFile(__dirname + CONTRACT_AXIE_ABI_JSON_PATH, 'utf8'))
-  const axieContract = await new ethers.Contract(
+  const axieContract = new ethers.Contract(
     CONTRACT_AXIE_ADDRESS[network],
     CONTRACT_AXIE_ABI,
     signerOrProvider
@@ -27,7 +27,7 @@ export async function getAxieContract(signerOrProvider?: SignerOrProvider, netwo
 
 export async function getMarketplaceContract(signerOrProvider?: SignerOrProvider, network: AvailableNetworks = 'ronin') {
   const CONTRACT_MARKET_Abi = JSON.parse(await fs.readFile(__dirname + CONTRACT_MARKETPLACE_V2_ABI_JSON_PATH, 'utf8'))
-  const marketplaceContract = await new ethers.Contract(
+  const marketplaceContract = new ethers.Contract(
     CONTRACT_MARKETPLACE_V2_ADDRESS[network],
     CONTRACT_MARKET_Abi,
     signerOrProvider
@@ -37,7 +37,7 @@ export async function getMarketplaceContract(signerOrProvider?: SignerOrProvider
 
 export async function getBatchTransferContract(signerOrProvider?: SignerOrProvider, network: AvailableNetworks = 'ronin') {
   const CONTRACT_BATCHTRANSFER_ABI = JSON.parse(await fs.readFile(__dirname + CONTRACT_ERC721_BATCH_TRANSFER_ABI_JSON_PATH, 'utf8'))
-  const batchTransferContract = await new ethers.Contract(
+  const batchTransferContract = new ethers.Contract(
     CONTRACT_ERC721_BATCH_TRANSFER_ADDRESS[network],
     CONTRACT_BATCHTRANSFER_ABI,
     signerOrProvider
