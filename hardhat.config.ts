@@ -76,7 +76,7 @@ const config: HardhatUserConfig = {
     },
     saigon: {
       chainId: 2021,
-      url: 'https://saigon-testnet.roninchain.com/rpc',
+      url: 'https://api-gateway.skymavis.com/rpc/testnet',
       httpHeaders: {
         'x-api-key': process.env.SKIMAVIS_DAPP_KEY!
       },
