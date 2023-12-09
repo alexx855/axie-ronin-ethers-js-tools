@@ -1,6 +1,6 @@
 # Axie Infinity ether js tools
 
-This repository provides a set of utilities and examples to interact with the Ronin network and the Axie Infinity marketplace.
+This repository provides a set of functions that make it easier for developers to interact with their Axies on the Ronin network and the maketplace.
 
 ## How to use
 
@@ -166,4 +166,4 @@ npx hardhat transfer-all-axies --address $ADDRESS --axies "$AXIE_ID,$AXIE_ID"
 
 #### Contributing
 
-Pull requests and issues are welcome :)
+Feel free to open an issue or a pull request if you have any questions or suggestions.

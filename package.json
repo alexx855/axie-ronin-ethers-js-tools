@@ -1,12 +1,10 @@
 {
   "name": "axie-ronin-ethers-js-tools",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "A set of functions that make it easier for developers to interact with their Axies on the Ronin network and the maketplace.",
   "scripts": {
     "build": "tsc",
-    "prepublishOnly": "npm run build",
-    "account": "npx hardhat account",
-    "access-token": "npx hardhat generate-access-token"
+    "prepublishOnly": "npm run build"
   },
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -23,7 +21,6 @@
     "Bot",
     "Ronin",
     "Marketplace",
-    "Hardhat",
     "Access Token",
     "Account",
     "Buy",
@@ -54,6 +51,7 @@
     "hardhat": "^2.14.0"
   },
   "dependencies": {
+    "@roninbuilders/contracts": "^0.0.5",
     "ethers": "^5.7.0",
     "typescript": "^5.1.6"
   }

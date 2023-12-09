@@ -1,7 +1,8 @@
 import { Signer, ethers } from "ethers"
-import { DEFAULT_GAS_LIMIT, CONTRACT_WETH_ADDRESS, GRAPHQL_URL } from "../constants"
+import { DEFAULT_GAS_LIMIT, GRAPHQL_URL } from "../constants"
 import { getMarketplaceContract, getWETHContract } from "../contracts"
 import { apiRequest } from "../utils"
+import { WETH_ADDRESS } from "@roninbuilders/contracts"
 
 
 interface Axie {
@@ -167,7 +168,7 @@ export default async function buyMarketplaceOrder(
           +order.assets[0].quantity // quantity
         ]],
         order.expiredAt,
-        CONTRACT_WETH_ADDRESS['ronin'], // paymentToken WETH
+        WETH_ADDRESS, // paymentToken WETH
         order.startedAt,
         order.basePrice,
         order.endedAt,

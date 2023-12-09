@@ -1,65 +1,66 @@
-import * as fs from 'fs/promises'
 import { ethers } from "ethers";
 import { SignerOrProvider } from "./utils";
+import { type AvailableNetworks } from "./constants";
 import {
-  type AvailableNetworks,
-  CONTRACT_AXIE_ADDRESS,
-  CONTRACT_ERC721_BATCH_TRANSFER_ADDRESS,
-  CONTRACT_MARKETPLACE_V2_ADDRESS,
-  CONTRACT_USDC_ADDRESS,
-  CONTRACT_WETH_ADDRESS,
-  CONTRACT_AXIE_ABI_JSON_PATH,
-  CONTRACT_ERC721_BATCH_TRANSFER_ABI_JSON_PATH,
-  CONTRACT_MARKETPLACE_V2_ABI_JSON_PATH,
-  CONTRACT_USDC_ABI_JSON_PATH,
-  CONTRACT_WETH_ABI_JSON_PATH
-} from "./constants";
+  AXIE_ADDRESS, AXIE_ADDRESS_SAIGON, AXIE_ABI,
+  MARKETPLACE_ADDRESS, MARKETPLACE_ADDRESS_SAIGON, MARKETPLACE_ABI,
+  ERC721_BATCH_TRANSFER_ADDRESS,
+  ERC721_BATCH_TRANSFER_ADDRESS_SAIGON,
+  ERC721_BATCH_TRANSFER_ABI,
+  WETH_ABI, WETH_ADDRESS, WETH_ADDRESS_SAIGON,
+  USDC_ADDRESS, USDC_ADDRESS_SAIGON, USDC_ABI,
+} from "@roninbuilders/contracts";
 
 export async function getAxieContract(signerOrProvider?: SignerOrProvider, network: AvailableNetworks = 'ronin') {
-  const CONTRACT_AXIE_ABI = JSON.parse(await fs.readFile(__dirname + CONTRACT_AXIE_ABI_JSON_PATH, 'utf8'))
+  const address = network === 'ronin' ? AXIE_ADDRESS : AXIE_ADDRESS_SAIGON
+  const abi = new ethers.utils.Interface(JSON.stringify(AXIE_ABI));
   const axieContract = new ethers.Contract(
-    CONTRACT_AXIE_ADDRESS[network],
-    CONTRACT_AXIE_ABI,
+    address,
+    abi,
     signerOrProvider
   )
   return axieContract
 }
 
 export async function getMarketplaceContract(signerOrProvider?: SignerOrProvider, network: AvailableNetworks = 'ronin') {
-  const CONTRACT_MARKET_Abi = JSON.parse(await fs.readFile(__dirname + CONTRACT_MARKETPLACE_V2_ABI_JSON_PATH, 'utf8'))
+  const address = network === 'ronin' ? MARKETPLACE_ADDRESS : MARKETPLACE_ADDRESS_SAIGON
+  const abi = new ethers.utils.Interface(JSON.stringify(MARKETPLACE_ABI));
   const marketplaceContract = new ethers.Contract(
-    CONTRACT_MARKETPLACE_V2_ADDRESS[network],
-    CONTRACT_MARKET_Abi,
+    address,
+    abi,
     signerOrProvider
   )
   return marketplaceContract
 }
 
 export async function getBatchTransferContract(signerOrProvider?: SignerOrProvider, network: AvailableNetworks = 'ronin') {
-  const CONTRACT_BATCHTRANSFER_ABI = JSON.parse(await fs.readFile(__dirname + CONTRACT_ERC721_BATCH_TRANSFER_ABI_JSON_PATH, 'utf8'))
+  const address = network === 'ronin' ? ERC721_BATCH_TRANSFER_ADDRESS : ERC721_BATCH_TRANSFER_ADDRESS_SAIGON
+  const abi = new ethers.utils.Interface(JSON.stringify(ERC721_BATCH_TRANSFER_ABI));
   const batchTransferContract = new ethers.Contract(
-    CONTRACT_ERC721_BATCH_TRANSFER_ADDRESS[network],
-    CONTRACT_BATCHTRANSFER_ABI,
+    address,
+    abi,
     signerOrProvider
   )
   return batchTransferContract
 }
 
 export async function getWETHContract(signerOrProvider?: SignerOrProvider, network: AvailableNetworks = 'ronin') {
-  const CONTRACT_WETH_ABI = JSON.parse(await fs.readFile(__dirname + CONTRACT_WETH_ABI_JSON_PATH, 'utf8'))
+  const address = network === 'ronin' ? WETH_ADDRESS : WETH_ADDRESS_SAIGON
+  const abi = new ethers.utils.Interface(JSON.stringify(WETH_ABI));
   const wethContract = new ethers.Contract(
-    CONTRACT_WETH_ADDRESS[network],
-    CONTRACT_WETH_ABI,
+    address,
+    abi,
     signerOrProvider
   )
   return wethContract
 }
 
 export async function getUSDCContract(signerOrProvider?: SignerOrProvider, network: AvailableNetworks = 'ronin') {
-  const CONTRACT_USDC_ABI = JSON.parse(await fs.readFile(__dirname + CONTRACT_USDC_ABI_JSON_PATH, 'utf8'))
+  const address = network === 'ronin' ? USDC_ADDRESS : USDC_ADDRESS_SAIGON
+  const abi = new ethers.utils.Interface(JSON.stringify(USDC_ABI));
   const usdcContract = new ethers.Contract(
-    CONTRACT_USDC_ADDRESS[network],
-    CONTRACT_USDC_ABI,
+    address,
+    abi,
     signerOrProvider
   )
   return usdcContract

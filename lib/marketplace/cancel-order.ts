@@ -1,10 +1,10 @@
 import { ethers } from "ethers";
 import { apiRequest } from "../utils"
 import {
-  CONTRACT_WETH_ADDRESS,
   GRAPHQL_URL
 } from "../constants"
 import { getMarketplaceContract } from "../contracts";
+import { WETH_ADDRESS } from "@roninbuilders/contracts";
 
 
 export default async function cancelMarketplaceOrder(
@@ -122,7 +122,7 @@ export default async function cancelMarketplaceOrder(
         order.assets[0].quantity
       ]],
       order.expiredAt,
-      CONTRACT_WETH_ADDRESS['ronin'], // paymentToken
+      WETH_ADDRESS, // paymentToken
       order.startedAt,
       order.basePrice,
       order.endedAt,
