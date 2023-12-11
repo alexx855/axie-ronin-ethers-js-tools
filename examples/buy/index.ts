@@ -21,7 +21,7 @@ async function buyAxie() {
   const provider = new ethers.providers.JsonRpcProvider(connection);
 
   // Import the wallet private key from the environment
-  const wallet = new ethers.Wallet(process.env.PRIVATE_KEY!, provider)
+  const wallet = new ethers.Wallet(process.env.PRIVATE_KEY, provider)
 
   const address = await wallet.getAddress()
   console.log(`Wallet address: ${address}`)
@@ -42,8 +42,8 @@ async function buyAxie() {
   const axieId = parseInt(args[0])
 
   const skyMavisApiKey = process.env.SKIMAVIS_DAPP_KEY
-  const receipt = await buyMarketplaceOrder(axieId, wallet, provider, skyMavisApiKey)
-  console.log(receipt.transactionHash)
+  const receipt = await buyMarketplaceOrder(axieId, wallet, skyMavisApiKey)
+  console.log(receipt ? receipt.transactionHash : 'Something went wrong :(')
 }
 
 buyAxie()
