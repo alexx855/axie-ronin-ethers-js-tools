@@ -119,7 +119,7 @@ import { buyMarketplaceOrder } from "axie-ronin-ethers-js-tools";
 const buyAxieFromMarketplace = async (axieId: number) => {
   // Wait for the transaction to be mined
   const skyMavisApiKey = 'xxxxx' // get from https://developers.skymavis.com/console/applications/
-  const receipt = await buyMarketplaceOrder(axieId, wallet, provider, skyMavisApiKey)
+  const receipt = await buyMarketplaceOrder(axieId, wallet, skyMavisApiKey)
   console.log(receipt.transactionHash)
 }
 ```
