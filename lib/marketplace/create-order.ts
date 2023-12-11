@@ -1,5 +1,5 @@
 import { ethers } from "ethers";
-import { MARKETPLACE_ADDRESS, AXIE_ADDRESS, WETH_ADDRESS } from "@roninbuilders/contracts";
+import { MARKETPLACE_GATEWAY_V2, AXIE, WETH } from "@roninbuilders/contracts";
 import { apiRequest } from "../utils"
 import {
   GRAPHQL_URL
@@ -119,7 +119,7 @@ export default async function createMarketplaceOrder(
     name: 'MarketGateway',
     version: '1',
     chainId: '2020',
-    verifyingContract: MARKETPLACE_ADDRESS
+    verifyingContract: MARKETPLACE_GATEWAY_V2.address
   };
 
   const order = {
@@ -128,13 +128,13 @@ export default async function createMarketplaceOrder(
     assets: [
       {
         erc: '1',
-        addr: AXIE_ADDRESS,
+        addr: AXIE.address,
         id: axieId,
         quantity: '0' // ??? not sure why this is 0, maybbe its for items
       }
     ],
     expiredAt,
-    paymentToken: WETH_ADDRESS,
+    paymentToken: WETH.address,
     startedAt,
     basePrice,
     endedAt,
@@ -204,7 +204,7 @@ export default async function createMarketplaceOrder(
       assets: [
         {
           id: axieId,
-          address: AXIE_ADDRESS,
+          address: AXIE.address,
           erc: 'Erc721',
           quantity: '0'
         }
