@@ -1,6 +1,6 @@
-# Axie Infinity ether js tools
+# Axie Infinity ethers tools
 
-This repository provides a set of functions that make it easier for developers to interact with their Axies on the Ronin network and the maketplace.
+This repository provides a set of scripts to interact with Axies on the Ronin Network.
 
 ## How to use
 
@@ -10,7 +10,7 @@ Install the dependencies
 npm install axie-ronin-ethers-js-tools ethers@5.7.0 dotenv
 ```
 
-Generate a wallet and provider, which will be used to interact with the Ronin network using ethers.js
+Create a wallet and provider with ethers, which will be used to interact with the Ronin Network
 
 ```typescript
 import { ethers } from 'ethers';
@@ -144,9 +144,9 @@ const batchTransferAllAxies = async (addressTo:string) => {
 
 ```
 
-#### How to dev/test locally
+#### How to use locally
 
-Clone the repository, copy `.env.example` to `.env` and fill in your account private key (you can get this from the Ronin wallet). Please do not share your private key with anyone or commit it to a public repository.
+Clone this repository, copy `.env.example` to `.env` and fill in your account private key (you can get this from the Ronin wallet, or generate a new one). Then on the command line run:
 
 ```shell
 npm install
