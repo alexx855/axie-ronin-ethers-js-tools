@@ -9,17 +9,22 @@ import transferAllAxies from "./scripts/transfer-all-axies";
 import transferAxie from "./scripts/transfer-axie";
 import unlistAllAxies from "./scripts/unlist-all-axies";
 import unlistAxie from "./scripts/unlist-axie";
-import generateMartketplaceAccessToken from "./scripts/generate-access-token";
+import { refreshAccessToken } from "./scripts/access-token";
 
 import * as dotenv from 'dotenv' // see https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
 dotenv.config()
+
+if (process.env.PRIVATE_KEY === undefined) {
+  throw new Error('PRIVATE_KEY is not set, set it in .env file')
+}
 
 task('account', 'Get account info')
   .addOptionalParam('address', 'The address to get info, default is the first account')
   .setAction(account)
 
-task('generate-access-token', 'Generate an access token for the marketplace')
-  .setAction(generateMartketplaceAccessToken)
+task('refresh-access-token', 'Generate an access token for the marketplace')
+  .addParam('token', 'The current access token')
+  .setAction(refreshAccessToken)
 
 task('send', 'send ron to account')
   .addParam('to', 'The address to send RON')
@@ -72,7 +77,7 @@ const config: HardhatUserConfig = {
       httpHeaders: {
         'x-api-key': process.env.SKIMAVIS_DAPP_KEY!
       },
-      accounts: [process.env.PRIVATE_KEY!]
+      accounts: [process.env.PRIVATE_KEY]
     },
     saigon: {
       chainId: 2021,
@@ -80,7 +85,7 @@ const config: HardhatUserConfig = {
       httpHeaders: {
         'x-api-key': process.env.SKIMAVIS_DAPP_KEY!
       },
-      accounts: [process.env.PRIVATE_KEY!]
+      accounts: [process.env.PRIVATE_KEY]
     }
   }
 }

@@ -1,7 +1,17 @@
 import type { HardhatRuntimeEnvironment } from "hardhat/types"
-import { exchangeToken, generateAccessTokenMessage } from "../lib/marketplace/access-token"
+import { exchangeToken, generateAccessTokenMessage, refreshToken } from "../lib/marketplace/access-token";
 
-export default async function generateMartketplaceAccessToken({ }, hre: HardhatRuntimeEnvironment) {
+export async function refreshAccessToken({ refresh_token }: { refresh_token: string }, hre: HardhatRuntimeEnvironment) {
+  try {
+    const { newAccessToken } = await refreshToken(refresh_token)
+    console.log(newAccessToken)
+    return newAccessToken
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+export async function generateMartketplaceAccessToken({ }, hre: HardhatRuntimeEnvironment) {
   try {
     // Get signer
     const accounts = await hre.ethers.getSigners()

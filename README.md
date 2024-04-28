@@ -34,25 +34,8 @@ const wallet = new ethers.Wallet(process.env.PRIVATE_KEY, provider)
 
 ### Generate a marketplace access token, which is required to interact with the marketplace
 
-```typescript
-import { generateAccessTokenMessage, exchangeToken } from 'axie-ronin-ethers-js-tools';
+Get it from https://app.axieinfinity.com/marketplace/ login and copy from the network tab using the browser developer tools  ![ConsoleScreenshot](./examples/ConsoleScreenshot.png)
 
-const getMarketplaceAccessToken = async (wallet: ethers.Wallet): Promise<string> => {
-  // Get address from signer
-  const address = await wallet.getAddress()
-  // Generate message to sign
-  const domain = `example.com`
-  const uri = "https:/example.com"
-  const statement = `any statement`
-  const message = await generateAccessTokenMessage(address, domain, uri, statement)
-  // Sign the message
-  const signature = await wallet.signMessage(message)
-  // Exchange the signature for an access token
-  const { accessToken } = await exchangeToken(signature, message)
-  return accessToken
-}
-
-```
 
 ### List an axie for sale on the marketplace
 
@@ -139,7 +122,7 @@ const batchTransferAllAxies = async (addressTo:string) => {
   // get all axies ids from the account
   const axieIds: number[] = await getAxieIdsFromAccount(address, provider)
   // wait for tx to be mined and get receipt
-  const receipt = await batchTransferAxies(wallet, addressTo, axies)
+  const receipt = await batchTransferAxies(wallet, addressTo, axieIds)
 }
 
 ```
@@ -151,7 +134,7 @@ Clone this repository, copy `.env.example` to `.env` and fill in your account pr
 ```shell
 npm install
 npx hardhat account
-npx hardhat generate-access-token
+npx hardhat refresh-access-token --token $REFRESH_TOKEN
 npx hardhat list --axie $AXIE_ID --base-price 0.1
 npx hardhat list --axie $AXIE_ID --base-price 0.1 --ended-price 0.2 --duration 1
 npx hardhat list-all --base-price 0.1
