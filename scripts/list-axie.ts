@@ -1,12 +1,11 @@
 
 import type { HardhatRuntimeEnvironment } from "hardhat/types"
 import createMarketplaceOrder from "../lib/marketplace/create-order"
-import { exchangeToken, generateAccessTokenMessage } from "../lib/marketplace/access-token"
 import approveMarketplaceContract from "../lib/marketplace/approve"
 
 import * as dotenv from 'dotenv' // see https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
+import { ethers } from "ethers"
 dotenv.config()
-
 
 export default async function listAxie(taskArgs: {
   axie: string
@@ -16,6 +15,16 @@ export default async function listAxie(taskArgs: {
   gasLimit?: number
 }, hre: HardhatRuntimeEnvironment) {
   try {
+
+    if (
+      !process.env.PRIVATE_KEY ||
+      !process.env.MARKETPLACE_ACCESS_TOKEN ||
+      !process.env.MARKETPLACE_REFRESH_TOKEN ||
+      !process.env.SKIMAVIS_DAPP_KEY
+    ) {
+      throw new Error('Missing environment variables, please check your .env file')
+    }
+
     if (hre.network.name != 'ronin') {
       throw new Error('Network not supported')
     }
@@ -27,25 +36,26 @@ export default async function listAxie(taskArgs: {
 
     const basePrice = hre.ethers.utils.parseUnits(taskArgs.basePrice, 'ether').toString()
 
-    const accounts = await hre.ethers.getSigners()
-    const signer = accounts[0]
-    const address = signer.address.toLowerCase()
-
     const axieId = taskArgs.axie
     if (isNaN(parseInt(axieId, 10)) || axieId.length < 1) {
       console.log('Invalid Axie ID provided')
       return false
     }
 
-    // Generate access token
-    const accessTokenMessage = await generateAccessTokenMessage(address)
-    // Sign the message
-    const accessTokenSignature = await signer.signMessage(accessTokenMessage)
-    // Exchange the signature for an access token
-    const { accessToken } = await exchangeToken(accessTokenSignature, accessTokenMessage)
+    // Connection to the Ronin network using the RPC endpoint
+    const connection = {
+      url: 'https://api-gateway.skymavis.com/rpc',
+      headers: {
+        'x-api-key': process.env.SKIMAVIS_DAPP_KEY
+      }
+    }
+
+    const provider = new ethers.providers.JsonRpcProvider(connection);
+    const wallet = new ethers.Wallet(process.env.PRIVATE_KEY, provider) 
 
     // check if marketplace contract is approved for the axie contract
-    const isApproved = await approveMarketplaceContract(address, signer)
+    const address = await wallet.getAddress()
+    const isApproved = await approveMarketplaceContract(address, wallet)
     if (!isApproved) {
       console.log('Aborting, Axie Contract is not approved for the Marketplace')
       return false
@@ -88,15 +98,15 @@ export default async function listAxie(taskArgs: {
       expiredAt,
     }
 
-    const skymavisApiKey = process.env.SKIMAVIS_DAPP_KEY!
-    const result = await createMarketplaceOrder(orderData, accessToken, signer, skymavisApiKey)
 
+    const result = await createMarketplaceOrder(orderData, process.env.MARKETPLACE_ACCESS_TOKEN!, wallet, process.env.SKIMAVIS_DAPP_KEY!)
     if (result === null || result.data?.createOrder.hash === undefined || result.errors !== undefined) {
-      console.log('Error creating order', result)
+      console.error('Error creating order', result)
       return false
     }
 
     console.log(`Axie ${axieId} listed for ${hre.ethers.utils.formatEther(basePrice)} WETH`)
+    return true
 
     // // create activity on the marketplace (optional)
     // createActivity("ListAxie", {
@@ -107,7 +117,7 @@ export default async function listAxie(taskArgs: {
     //   txHash: result.data?.createOrder.hash
     // }, accessToken)
 
-  } catch (error: any) {
+  } catch (error) {
     console.error(error)
   }
   return false

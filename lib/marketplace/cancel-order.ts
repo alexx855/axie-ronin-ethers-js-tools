@@ -3,7 +3,7 @@ import { apiRequest } from "../utils"
 import {
   GRAPHQL_URL
 } from "../constants"
-import { APP_AXIE_ORDER_EXCHANGE, MARKETPLACE_GATEWAY_V2, MARKET_GATEWAY, WETH } from "@roninbuilders/contracts";
+import { ORDER_EXCHANGE_LOGIC, APP_AXIE_ORDER_EXCHANGE, MARKETPLACE_GATEWAY_V2, MARKET_GATEWAY, WRAPPED_ETHER } from "@roninbuilders/contracts";
 
 
 export default async function cancelMarketplaceOrder(
@@ -109,19 +109,11 @@ export default async function cancelMarketplaceOrder(
 
   const { order } = result.data.axie
 
-  // marketplace gatweay contract
-  const abiGateway = new ethers.utils.Interface(MARKET_GATEWAY.abi);
-  const contractGateway = new ethers.Contract(
-    MARKETPLACE_GATEWAY_V2.address,
-    abiGateway,
-    signer
-  )
-
   // marketplace order exchange contract
-  const abi = new ethers.utils.Interface(APP_AXIE_ORDER_EXCHANGE.abi);
+  const marketAbi = new ethers.utils.Interface(MARKET_GATEWAY.abi);
   const contract = new ethers.Contract(
     MARKETPLACE_GATEWAY_V2.address,
-    abi,
+    marketAbi,
     signer
   )
 
@@ -135,11 +127,11 @@ export default async function cancelMarketplaceOrder(
     [[ // MarketAsset.Asset[]
       1, // MarketAsset.TokenStandard
       order.assets[0].address, // tokenAddress
-      order.assets[0].id, // axieId
+      +order.assets[0].id, // axieId
       +order.assets[0].quantity // quantity
     ]],
     order.expiredAt,
-    WETH.address, // paymentToken WETH
+    WRAPPED_ETHER.address, // paymentToken WETH
     order.startedAt,
     order.basePrice,
     order.endedAt,
@@ -149,14 +141,17 @@ export default async function cancelMarketplaceOrder(
     425, // Market fee percentage, 4.25%
   ]
 
-  // Encode the values
+  // Encode the orderData values
   const encodedOrderData = await ethers.utils.defaultAbiCoder.encode(orderTypes, [orderData]);
 
-  // Wait for the transaction to be mined
-  const encondedCancelOrderData = contract.interface.encodeFunctionData('cancelOrder', [encodedOrderData])
+  // Encode the values again for the cancelOrder function
+  const axieOrderExchangeInterface = new ethers.utils.Interface(APP_AXIE_ORDER_EXCHANGE.abi);
+  const orderExchangeData = axieOrderExchangeInterface.encodeFunctionData('cancelOrder', [
+    encodedOrderData
+  ])
 
   // Send the transaction
-  const tx = await contractGateway.interactWith('ORDER_EXCHANGE', encondedCancelOrderData)
+  const tx = await contract.interactWith('ORDER_EXCHANGE', orderExchangeData)
   const receipt = await tx.wait()
   return receipt
 }

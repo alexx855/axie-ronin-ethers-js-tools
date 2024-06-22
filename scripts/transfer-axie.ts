@@ -22,7 +22,7 @@ export default async function transferAxie(taskArgs: {
     console.log(`Transferring Axie #${axieId} from ${address} to ${addressTo}`)
 
     // get axie contract
-    const axieContract = await getAxieContract(hre.ethers.provider)
+    const axieContract = await getAxieContract(signer)
 
     // Transfer
     const tx = await axieContract.transferFrom(address, addressTo, axieId)

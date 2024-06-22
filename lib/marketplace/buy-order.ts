@@ -1,7 +1,7 @@
 import { BigNumber, Signer, ethers } from "ethers"
 import { DEFAULT_GAS_LIMIT, GRAPHQL_URL } from "../constants"
 import { apiRequest } from "../utils"
-import { APP_AXIE_ORDER_EXCHANGE, MARKETPLACE_GATEWAY_V2, MARKET_GATEWAY, WETH } from "@roninbuilders/contracts"
+import { APP_AXIE_ORDER_EXCHANGE, MARKETPLACE_GATEWAY_V2, MARKET_GATEWAY, WRAPPED_ETHER } from "@roninbuilders/contracts"
 
 interface Axie {
   id: string
@@ -52,6 +52,7 @@ interface IGetAxieDetail {
 export default async function buyMarketplaceOrder(
   axieId: number,
   signer: Signer,
+  accessToken: string,
   skymavisApiKey: string
 ): Promise<ethers.providers.TransactionReceipt | false> {
   const query = `query GetAxieDetail($axieId: ID!) {
@@ -108,13 +109,13 @@ export default async function buyMarketplaceOrder(
   }
 
   const headers = {
-    'x-api-key': skymavisApiKey
+    'x-api-key': skymavisApiKey,
+    'authorization': `Bearer ${accessToken}`,
   }
 
   try {
     const results = await apiRequest<IGetAxieDetail>(GRAPHQL_URL, JSON.stringify({ query, variables }), headers)
     const order = results.data?.axie.order
-
     if (!order) {
       console.log('No order found')
       return false
@@ -124,35 +125,27 @@ export default async function buyMarketplaceOrder(
 
     const address = await signer.getAddress()
 
-    // marketplace gatweay contract
-    const abiGateway = new ethers.utils.Interface(MARKET_GATEWAY.abi);
-    const contractGateway = new ethers.Contract(
-      MARKETPLACE_GATEWAY_V2.address,
-      abiGateway,
-      signer
-    )
-
     // marketplace order exchange contract
-    const abi = new ethers.utils.Interface(APP_AXIE_ORDER_EXCHANGE.abi);
+    const marketAbi = new ethers.utils.Interface(MARKET_GATEWAY.abi);
     const contract = new ethers.Contract(
       MARKETPLACE_GATEWAY_V2.address,
-      abi,
+      marketAbi,
       signer
     )
 
     // Check if the marketplace contract has enough WETH allowance
     const wethContract = new ethers.Contract(
-      WETH.address,
-      new ethers.utils.Interface(WETH.abi),
+      WRAPPED_ETHER.address,
+      new ethers.utils.Interface(WRAPPED_ETHER.abi),
       signer
     )
 
-    const allowance = await wethContract.allowance(address, contractGateway.address)
+    const allowance = await wethContract.allowance(address, contract.address)
     if (ethers.BigNumber.isBigNumber(allowance) && allowance.eq(0)) {
       console.log('Need approve the marketplace contract to transfer WETH, no allowance')
       // Same amount as the ronin wallet uses, i got it from there
       const amountToapproved = '115792089237316195423570985008687907853269984665640564039457584007913129639935'
-      const txApproveWETH = await wethContract.approve(contractGateway.address, amountToapproved, { gasLimit: DEFAULT_GAS_LIMIT })
+      const txApproveWETH = await wethContract.approve(contract.address, amountToapproved, { gasLimit: DEFAULT_GAS_LIMIT })
       const txArppoveReceipt = await txApproveWETH.wait()
       console.log('Approved WETH', txArppoveReceipt.transactionHash)
     }
@@ -161,6 +154,7 @@ export default async function buyMarketplaceOrder(
     const orderTypes = [
       '(address maker, uint8 kind, (uint8 erc,address addr,uint256 id,uint256 quantity)[] assets, uint256 expiredAt, address paymentToken, uint256 startedAt, uint256 basePrice, uint256 endedAt, uint256 endedPrice, uint256 expectedState, uint256 nonce, uint256 marketFeePercentage)',
     ];
+
     const orderData = [
       order.maker,
       1, // market order kind
@@ -171,7 +165,7 @@ export default async function buyMarketplaceOrder(
         +order.assets[0].quantity // quantity
       ]],
       order.expiredAt,
-      WETH.address, // paymentToken WETH
+      WRAPPED_ETHER.address, // paymentToken WETH
       order.startedAt,
       order.basePrice,
       order.endedAt,
@@ -181,8 +175,9 @@ export default async function buyMarketplaceOrder(
       425, // Market fee percentage, 4.25%
     ]
 
-    // Encode the values
+    // Encode the order values
     const encodedOrderData = await ethers.utils.defaultAbiCoder.encode(orderTypes, [orderData]);
+
     const settleInfo = {
       orderData: encodedOrderData,
       signature: order.signature,
@@ -192,9 +187,14 @@ export default async function buyMarketplaceOrder(
       refunder: address,
     };
 
-    // Settle order
-    const settledOrderExchangeData = contract.interface.encodeFunctionData('settleOrder', [settleInfo, BigNumber.from(order.currentPrice)])
-    const txBuyAxie = await contractGateway.interactWith('ORDER_EXCHANGE', settledOrderExchangeData)
+    const axieOrderExchangeInterface = new ethers.utils.Interface(APP_AXIE_ORDER_EXCHANGE.abi);
+    // Encode the values again
+    const orderExchangeData = axieOrderExchangeInterface.encodeFunctionData('settleOrder', [
+      settleInfo, BigNumber.from(order.currentPrice)
+    ])
+
+    // Call the contract
+    const txBuyAxie = await contract.interactWith('ORDER_EXCHANGE', orderExchangeData)
 
     // Wait for the transaction to be mined
     const receipt = await txBuyAxie.wait()

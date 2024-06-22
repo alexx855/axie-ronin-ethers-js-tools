@@ -24,8 +24,12 @@ export default async function buyAxie(taskArgs: {
     const signer = accounts[0]
 
     // wait for the transaction to be mined
-    const skymavisApiKey = process.env.SKIMAVIS_DAPP_KEY!
-    const receipt = await buyMarketplaceOrder(axieId, signer, hre.ethers.provider, skymavisApiKey)
+    const receipt = await buyMarketplaceOrder(axieId, signer, process.env.MARKETPLACE_ACCESS_TOKEN!, process.env.SKIMAVIS_DAPP_KEY!)
+    if (!receipt) {
+      console.log('Error buying axie')
+      return false
+    }
+
     console.log('Receipt:', receipt.transactionHash)
     return receipt.transactionHash as string
   } catch (error) {

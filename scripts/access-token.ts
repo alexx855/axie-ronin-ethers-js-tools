@@ -1,10 +1,9 @@
 import type { HardhatRuntimeEnvironment } from "hardhat/types"
 import { exchangeToken, generateAccessTokenMessage, refreshToken } from "../lib/marketplace/access-token";
 
-export async function refreshAccessToken({ refresh_token }: { refresh_token: string }, hre: HardhatRuntimeEnvironment) {
+export async function refreshAccessToken(refresh_token: { token: string }, hre: HardhatRuntimeEnvironment) {
   try {
-    const { newAccessToken } = await refreshToken(refresh_token)
-    console.log(newAccessToken)
+    const { newAccessToken } = await refreshToken(refresh_token.token)
     return newAccessToken
   } catch (error) {
     console.error(error)

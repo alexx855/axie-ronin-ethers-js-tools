@@ -1,5 +1,5 @@
 import { ethers } from "ethers";
-import { MARKETPLACE_GATEWAY_V2, AXIE, WETH } from "@roninbuilders/contracts";
+import { MARKETPLACE_GATEWAY_V2, AXIE_PROXY, WRAPPED_ETHER } from "@roninbuilders/contracts";
 import { apiRequest } from "../utils"
 import {
   GRAPHQL_URL
@@ -128,13 +128,13 @@ export default async function createMarketplaceOrder(
     assets: [
       {
         erc: '1',
-        addr: AXIE.address,
+        addr: AXIE_PROXY.address,
         id: axieId,
         quantity: '0' // ??? not sure why this is 0, maybbe its for items
       }
     ],
     expiredAt,
-    paymentToken: WETH.address,
+    paymentToken: WRAPPED_ETHER.address,
     startedAt,
     basePrice,
     endedAt,
@@ -145,16 +145,6 @@ export default async function createMarketplaceOrder(
   };
 
   const signature = await signer._signTypedData(domain, types, order);
-
-  //   // fallback to send eth_signTypedData_v4 from the provider
-  //   signature = await signer.provider.send('eth_signTypedData_v4', [address, JSON.stringify({
-  //     types,
-  //     domain,
-  //     primaryType: 'Order',
-  //     message: order
-  //   })])
-  // }
-
 
   const query = `
         mutation CreateOrder($order: InputOrder!, $signature: String!) {
@@ -204,7 +194,7 @@ export default async function createMarketplaceOrder(
       assets: [
         {
           id: axieId,
-          address: AXIE.address,
+          address: AXIE_PROXY.address,
           erc: 'Erc721',
           quantity: '0'
         }
@@ -219,8 +209,8 @@ export default async function createMarketplaceOrder(
   }
 
   const headers = {
-    'authorization': `Bearer ${accessToken}`,
-    'x-api-key': skyMavisApiKey
+    'authorization': `Bearer ${accessToken}`, // axie marketplace access token
+    'x-api-key': skyMavisApiKey // skymavis app api key
   }
 
   const result = await apiRequest<ICreateOrderResult>(GRAPHQL_URL, JSON.stringify({ query, variables }), headers)

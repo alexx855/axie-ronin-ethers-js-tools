@@ -61,5 +61,8 @@ export const refreshToken = async (refreshToken: string) => {
   const data = await apiRequest<IAuthLoginResponse>(AUTH_TOKEN_REFRESH_URL, JSON.stringify({ refreshToken }))
   const newAccessToken = data.accessToken
   const newRefreshToken = data.refreshToken
+  if (!newAccessToken || !newRefreshToken) {
+    throw new Error('Error refreshing token, API response: ' + JSON.stringify(data))
+  }
   return { newAccessToken, newRefreshToken }
 }

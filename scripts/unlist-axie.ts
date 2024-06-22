@@ -24,7 +24,9 @@ export default async function unlistAxie(taskArgs: { axie: string }, hre: Hardha
     // wait for the transaction to be mined
     const skymavisApiKey = process.env.SKIMAVIS_DAPP_KEY!
     const receipt = await cancelMarketplaceOrder(taskArgs.axie, signer, skymavisApiKey)
-    console.log(`Axie ${axieId} unlisted, tx: ${receipt.transactionHash}`)
+    if (!receipt) {
+      return false
+    }
     return receipt.transactionHash
   } catch (error) {
     console.error(error)
