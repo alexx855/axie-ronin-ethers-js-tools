@@ -1,7 +1,6 @@
 
 import type { HardhatRuntimeEnvironment } from "hardhat/types"
 import { getAxieContract } from "../lib/contracts"
-import { ethers } from "ethers"
 
 export default async function transferAxie(taskArgs: {
   address: string
@@ -25,7 +24,7 @@ export default async function transferAxie(taskArgs: {
     const axieContract = await getAxieContract(signer)
 
     // Transfer
-    const tx = await axieContract.transferFrom(address, addressTo, axieId)
+    const tx = await axieContract.transferFrom(address, addressTo, axieId, { gasPrice: 20000000000 })
 
     // wait for tx to be mined and get receipt
     const receipt = await tx.wait()
