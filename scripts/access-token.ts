@@ -4,6 +4,7 @@ import { exchangeToken, generateAccessTokenMessage, refreshToken } from "../lib/
 export async function refreshAccessToken(refresh_token: { token: string }, hre: HardhatRuntimeEnvironment) {
   try {
     const { newAccessToken } = await refreshToken(refresh_token.token)
+    console.info('New Access Token:', newAccessToken)
     return newAccessToken
   } catch (error) {
     console.error(error)
