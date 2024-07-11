@@ -27,6 +27,7 @@ export default async function unlistAxie(taskArgs: { axie: string }, hre: Hardha
     if (!receipt) {
       return false
     }
+    console.log('Transaction hash:', receipt.transactionHash)
     return receipt.transactionHash
   } catch (error) {
     console.error(error)
