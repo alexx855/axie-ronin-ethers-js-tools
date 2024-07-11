@@ -194,7 +194,7 @@ export default async function buyMarketplaceOrder(
     ])
 
     // Call the contract
-    const txBuyAxie = await contract.interactWith('ORDER_EXCHANGE', orderExchangeData)
+    const txBuyAxie = await contract.interactWith('ORDER_EXCHANGE', orderExchangeData, { gasPrice: 20000000000 })
 
     // Wait for the transaction to be mined
     const receipt = await txBuyAxie.wait()
