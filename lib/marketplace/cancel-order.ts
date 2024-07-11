@@ -151,7 +151,7 @@ export default async function cancelMarketplaceOrder(
   ])
 
   // Send the transaction
-  const tx = await contract.interactWith('ORDER_EXCHANGE', orderExchangeData)
+  const tx = await contract.interactWith('ORDER_EXCHANGE', orderExchangeData, { gasPrice: 20000000000 })
   const receipt = await tx.wait()
   return receipt
 }
