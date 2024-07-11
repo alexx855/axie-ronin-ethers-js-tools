@@ -26,7 +26,6 @@ export interface ICreateOrderResult {
   }>
 }
 
-// check and approve the axie contract to transfer axies from address to the marketplace contract
 export default async function createMarketplaceOrder(
   orderData: ICreateOrderData,
   accessToken: string,
