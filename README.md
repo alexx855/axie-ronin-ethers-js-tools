@@ -1,8 +1,5 @@
-# Axie Infinity ethers tools
 
-This repository provides a set of scripts to interact with Axies on the Ronin Network.
-
-## How to use
+## How to use npm 
 
 Install the dependencies
 
@@ -35,6 +32,26 @@ const wallet = new ethers.Wallet(process.env.PRIVATE_KEY, provider)
 ### Generate a marketplace access token, which is required to interact with the marketplace
 
 Get it from https://app.axieinfinity.com/marketplace/ login and copy from the network tab using the browser developer tools  ![ConsoleScreenshot](./examples/ConsoleScreenshot.png)
+
+#### How to test it locally
+
+Clone this repository, copy `.env.example` to `.env` and fill in your account private key (you can get this from the Ronin wallet, or generate a new one). Then on the command line run:
+
+```shell
+npm install
+npx hardhat account
+npx hardhat refresh-access-token --token $REFRESH_TOKEN
+npx hardhat list --axie $AXIE_ID --base-price 0.1
+npx hardhat list --axie $AXIE_ID --base-price 0.1 --ended-price 0.2 --duration 1
+npx hardhat list-all --base-price 0.1
+npx hardhat list-all --base-price 0.1 --ended-price 0.2 --duration 1
+npx hardhat unlist --axie $AXIE_ID
+npx hardhat unlist-all
+npx hardhat buy --axie $AXIE_ID
+npx hardhat transfer-axie --axie $AXIE_ID --address $ADDRESS
+npx hardhat transfer-all-axies --address $ADDRESS
+npx hardhat transfer-all-axies --address $ADDRESS --axies "$AXIE_ID,$AXIE_ID"
+```
 
 
 ### List an axie for sale on the marketplace
@@ -125,26 +142,6 @@ const batchTransferAllAxies = async (addressTo:string) => {
   const receipt = await batchTransferAxies(wallet, addressTo, axieIds)
 }
 
-```
-
-#### How to use locally
-
-Clone this repository, copy `.env.example` to `.env` and fill in your account private key (you can get this from the Ronin wallet, or generate a new one). Then on the command line run:
-
-```shell
-npm install
-npx hardhat account
-npx hardhat refresh-access-token --token $REFRESH_TOKEN
-npx hardhat list --axie $AXIE_ID --base-price 0.1
-npx hardhat list --axie $AXIE_ID --base-price 0.1 --ended-price 0.2 --duration 1
-npx hardhat list-all --base-price 0.1
-npx hardhat list-all --base-price 0.1 --ended-price 0.2 --duration 1
-npx hardhat unlist --axie $AXIE_ID
-npx hardhat unlist-all
-npx hardhat buy --axie $AXIE_ID
-npx hardhat transfer-axie --axie $AXIE_ID --address $ADDRESS
-npx hardhat transfer-all-axies --address $ADDRESS
-npx hardhat transfer-all-axies --address $ADDRESS --axies "$AXIE_ID,$AXIE_ID"
 ```
 
 #### Contributing
